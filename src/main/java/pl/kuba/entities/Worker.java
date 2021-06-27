@@ -3,13 +3,21 @@ package pl.kuba.entities;
 import javax.persistence.*;
 
 @Entity
-public class Worker {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+public class Worker extends BaseEntity{
     private String firstname;
     private String lastname;
-    private String position;
+    private boolean manager;
     @OneToOne
     private Branch branch;
+
+    public Worker(String firstname, String lastname, boolean manager, Branch branch) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.manager = manager;
+        this.branch = branch;
+    }
+
+    public Worker() {
+
+    }
 }
