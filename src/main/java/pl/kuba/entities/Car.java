@@ -1,10 +1,8 @@
 package pl.kuba.entities;
 
-import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 
 @Entity
-@Embeddable
 public class Car extends BaseEntity {
     private String brand;
     private String model;

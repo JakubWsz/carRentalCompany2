@@ -1,11 +1,15 @@
 package pl.kuba.entities;
 
-import javax.persistence.Embeddable;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Entity
-@Embeddable
-public class Client extends BaseEntity{
+public class Client{
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
     private String firstName;
     private String lastName;
     private String email;

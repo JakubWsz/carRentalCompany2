@@ -1,15 +1,15 @@
 package pl.kuba.entities;
 
-import javax.persistence.Embeddable;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
+import javax.persistence.*;
 
 @Entity
-@Embeddable
-public class Worker extends BaseEntity {
+public class Worker {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
     private String firstname;
     private String lastname;
     private String position;
-    @Embedded
+    @OneToOne
     private Branch branch;
 }

@@ -1,23 +1,23 @@
 package pl.kuba.entities;
 
-import javax.persistence.Embeddable;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Embeddable
-public class Reservation extends BaseEntity{
+public class Reservation {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
     private Date reservationDate;
-    @Embedded
+    @ManyToOne
     private Client client;
-    @Embedded
+    @ManyToOne
     private Car car;
     private Date rentDate;
     private Date returnDate;
-    @Embedded
+    @ManyToOne
     private Branch rentingBranch;
-    @Embedded
+    @ManyToOne
     private Branch receivingBranch;
     private int amountToPay;
 }

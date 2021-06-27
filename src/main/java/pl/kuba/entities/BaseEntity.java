@@ -3,7 +3,6 @@ package pl.kuba.entities;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import net.bytebuddy.dynamic.loading.InjectionClassLoader;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
