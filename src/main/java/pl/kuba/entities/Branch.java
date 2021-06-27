@@ -12,4 +12,16 @@ public class Branch extends BaseEntity {
     private List<Worker> workers;
     @ManyToMany
     private List<Car> availableCars;
+
+    public Branch(String address) {
+        this.address = address;
+    }
+
+    public Branch() {
+
+    }
+
+    public String getAddress() {
+        return address;
+    }
 }
