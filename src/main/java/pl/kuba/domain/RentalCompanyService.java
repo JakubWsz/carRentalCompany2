@@ -11,11 +11,12 @@ import java.util.Optional;
 
 @Service
 public class RentalCompanyService {
-    private RentalCompanyRepository rentalCompanyRepository;
-    private BranchRepository branchRepository;
+    private final RentalCompanyRepository rentalCompanyRepository;
+    private final BranchRepository branchRepository;
 
-    public RentalCompanyService(RentalCompanyRepository rentalCompanyRepository) {
+    public RentalCompanyService(RentalCompanyRepository rentalCompanyRepository, BranchRepository branchRepository) {
         this.rentalCompanyRepository = rentalCompanyRepository;
+        this.branchRepository = branchRepository;
     }
 
     public RentalCompany configureRentalCompany(String name, String website, String contactAddress, String owner) {
