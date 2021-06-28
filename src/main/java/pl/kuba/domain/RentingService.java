@@ -1,6 +1,7 @@
 package pl.kuba.domain;
 
 import org.springframework.stereotype.Service;
+import pl.kuba.entities.BodyType;
 import pl.kuba.entities.Branch;
 import pl.kuba.entities.Car;
 import pl.kuba.entities.Reservation;
@@ -12,6 +13,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RentingService {
@@ -28,6 +30,28 @@ public class RentingService {
         Reservation selectedReservation = findReservationByDate(date);
         List<Car> cars = new ArrayList<>();
         findAllReservations().stream()
+                .filter(reservation -> reservation.getRentDate().equals(selectedReservation.getRentDate()))
+                .filter(reservation -> reservation.getRentingBranch().equals(selectedBranch))
+                .forEach(reservation -> cars.add(reservation.getCar()));
+        return cars;
+    }
+
+    public Reservation makeReservation(String branchLocation, String date, String brand, String model, BodyType bodyType,
+                                       String color) throws ParseException {
+        List<Car> availableCars = new ArrayList<>(getAvailableCars(branchLocation, date));
+        CarFilter carFilter = new CarFilter();
+        List<Car> selectedCars = carFilter.getSelectedCars(brand, model, bodyType, color, availableCars);
+        CarReserver carReserver = new CarReserver();
+        Car reservedCar carReserver.reserveCar(selectedCars, brand, model, bodyType, color);
+        Reservation reservation = new Reservation()
+
+    }
+
+    public List<Car> getAvailableFilteredCars(String branchLocation, String date, List<Reservation> reservations) throws ParseException {
+        Branch selectedBranch = findSelectedBranch(branchLocation);
+        Reservation selectedReservation = findReservationByDate(date);
+        List<Car> cars = new ArrayList<>();
+        reservations.stream()
                 .filter(reservation -> reservation.getRentDate().equals(selectedReservation.getRentDate()))
                 .filter(reservation -> reservation.getRentingBranch().equals(selectedBranch))
                 .forEach(reservation -> cars.add(reservation.getCar()));
