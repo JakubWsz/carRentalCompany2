@@ -16,16 +16,14 @@ public class BranchManagementService {
     private final BranchRepository branchRepository;
     private final WorkerRepository workerRepository;
 
-    public BranchManagementService(BranchRepository branchRepository, WorkerRepository workerRepository,
-                                   CarRepository carRepository, ReservationRepository reservationRepository) {
+    public BranchManagementService(BranchRepository branchRepository, WorkerRepository workerRepository) {
         this.branchRepository = branchRepository;
         this.workerRepository = workerRepository;
     }
 
     public void hireWorker(String firstname, String lastname, boolean manager, Branch branch) {
         Worker worker = new Worker(firstname, lastname, manager, branch);
-        List<Branch> branches = findAllBranches();
-        branches.stream()
+        findAllBranches().stream()
                 .filter(branch1 -> branch1.getId() == branch.getId())
                 .findFirst()
                 .ifPresent(branch1 -> {
@@ -36,11 +34,9 @@ public class BranchManagementService {
     }
 
     public void fireWorker(Branch branch, long workerId) {
-        List<Branch> branches = findAllBranches();
-        List<Worker> workers = findAllWorkers();
-        Optional<Worker> firedWorker = workers.stream().filter(worker -> worker.getId() == workerId)
+        Optional<Worker> firedWorker = findAllWorkers().stream().filter(worker -> worker.getId() == workerId)
                 .findFirst();
-        firedWorker.ifPresent(worker -> branches.stream()
+        firedWorker.ifPresent(worker -> findAllBranches().stream()
                 .filter(targetBranch -> targetBranch.getId() == branch.getId())
                 .findFirst()
                 .ifPresent(targetBranch -> {

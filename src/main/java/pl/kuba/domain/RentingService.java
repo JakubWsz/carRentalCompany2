@@ -18,8 +18,7 @@ public class RentingService {
     private final BranchRepository branchRepository;
     private final ReservationRepository reservationRepository;
 
-    public RentingService(BranchRepository branchRepository, CarRepository carRepository,
-                          ReservationRepository reservationRepository) {
+    public RentingService(BranchRepository branchRepository, ReservationRepository reservationRepository) {
         this.branchRepository = branchRepository;
         this.reservationRepository = reservationRepository;
     }
