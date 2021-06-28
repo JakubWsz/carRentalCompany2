@@ -15,8 +15,6 @@ import java.util.Optional;
 public class BranchManagementService {
     private final BranchRepository branchRepository;
     private final WorkerRepository workerRepository;
-    private List<Branch> branches;
-    private List<Worker> workers;
 
     public BranchManagementService(BranchRepository branchRepository, WorkerRepository workerRepository,
                                    CarRepository carRepository, ReservationRepository reservationRepository) {
@@ -26,7 +24,7 @@ public class BranchManagementService {
 
     public void hireWorker(String firstname, String lastname, boolean manager, Branch branch) {
         Worker worker = new Worker(firstname, lastname, manager, branch);
-        branches = findAllBranches();
+        List<Branch> branches = findAllBranches();
         branches.stream()
                 .filter(branch1 -> branch1.getId() == branch.getId())
                 .findFirst()
@@ -37,26 +35,24 @@ public class BranchManagementService {
                 });
     }
 
-    public void firedWorker(Branch branch, long workerId) {
-        branches = findAllBranches();
-        workers = findAllWorkers();
+    public void fireWorker(Branch branch, long workerId) {
+        List<Branch> branches = findAllBranches();
+        List<Worker> workers = findAllWorkers();
         Optional<Worker> firedWorker = workers.stream().filter(worker -> worker.getId() == workerId)
                 .findFirst();
         firedWorker.ifPresent(worker -> branches.stream()
-                .filter(branch1 -> branch1.getId() == branch.getId())
+                .filter(targetBranch -> targetBranch.getId() == branch.getId())
                 .findFirst()
-                .ifPresent(branch1 -> {
-                    List<Worker> workers = branch1.getWorkers();
-                    workers.remove(worker);
-                    branch1.setWorkers(workers);
+                .ifPresent(targetBranch -> {
+                    List<Worker> workersAfterFireWorker = targetBranch.getWorkers();
+                    workersAfterFireWorker.remove(worker);
+                    targetBranch.setWorkers(workersAfterFireWorker);
                 }));
     }
 
-    private List<Branch> findAllBranches() {
-        return branches = branchRepository.findAll();
-    }
+    private List<Branch> findAllBranches() { return branchRepository.findAll(); }
 
     private List<Worker> findAllWorkers() {
-        return workers = workerRepository.findAll();
+        return workerRepository.findAll();
     }
 }

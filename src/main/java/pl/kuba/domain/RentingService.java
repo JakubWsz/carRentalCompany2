@@ -9,6 +9,7 @@ import pl.kuba.infrastructure.CarRepository;
 import pl.kuba.infrastructure.ReservationRepository;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -16,9 +17,6 @@ import java.util.List;
 public class RentingService {
     private final BranchRepository branchRepository;
     private final ReservationRepository reservationRepository;
-    private List<Branch> branches;
-    private List<Car> cars;
-    private List<Reservation> reservations;
 
     public RentingService(BranchRepository branchRepository, CarRepository carRepository,
                           ReservationRepository reservationRepository) {
@@ -29,6 +27,7 @@ public class RentingService {
     public List<Car> getAvailableCars(String branchLocation, String date) throws ParseException {
         Branch selectedBranch = findSelectedBranch(branchLocation);
         Reservation selectedReservation = findReservationByDate(date);
+        List<Car> cars = new ArrayList<>();
         findAllReservations().stream()
                 .filter(reservation -> reservation.getRentDate().equals(selectedReservation.getRentDate()))
                 .filter(reservation -> reservation.getRentingBranch().equals(selectedBranch))
@@ -38,7 +37,7 @@ public class RentingService {
 
     private Reservation findReservationByDate(String date) throws ParseException {
         Date dateToCheck = StringToDateConverter.convertStringToDate(date);
-        reservations = findAllReservations();
+        List<Reservation> reservations = findAllReservations();
         return reservations.stream()
                 .filter(reservation -> reservation.getReservationDate().equals(dateToCheck))
                 .findFirst()
@@ -53,10 +52,10 @@ public class RentingService {
     }
 
     private List<Branch> findAllBranches() {
-        return branches = branchRepository.findAll();
+        return branchRepository.findAll();
     }
 
     private List<Reservation> findAllReservations() {
-        return reservations = reservationRepository.findAll();
+        return reservationRepository.findAll();
     }
 }
