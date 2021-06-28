@@ -3,7 +3,7 @@ package pl.kuba.entities;
 import javax.persistence.*;
 
 @Entity
-public class Worker {
+public class Worker extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;

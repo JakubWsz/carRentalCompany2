@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-public class Reservation {
+public class Reservation extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;

@@ -6,7 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Client{
+public class Client extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
