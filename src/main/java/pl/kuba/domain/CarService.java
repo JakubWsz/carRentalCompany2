@@ -35,7 +35,9 @@ public class CarService {
     }
 
     public void updateCarAmountPerDay(long id, int carAmountPerDay) {
-        Optional<Car> optionalCar = getOptionalCar(id);
+//        Optional<Car> optionalCar =
+//                getOptionalCar(id).ifPresent(car ->{ car.setAmountPerDay(carAmountPerDay);}).
+
         if (optionalCar.isPresent()) {
             optionalCar.get().setAmountPerDay(carAmountPerDay);
         } else throwExceptionThereIsNoCarWithPassedId();
@@ -73,6 +75,7 @@ public class CarService {
         getAllReservations().stream()
                 .filter(reservation -> reservation.getRentDate().equals(selectedReservation.getRentDate()))
                 .filter(reservation -> reservation.getRentingBranch().equals(getSelectedBranch(branchLocation)))
+                .map(reservation -> new Car(reservation.getCar().getBrand(),reservation.getCar().getModel()))
                 .forEach(reservation -> cars.add(reservation.getCar()));
         return cars;
     }
