@@ -1,15 +1,13 @@
 package pl.kuba.api;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import pl.kuba.api.request.RentalCompanyConfigRequest;
 import pl.kuba.domain.RentalCompanyService;
 import pl.kuba.entities.Branch;
 import pl.kuba.entities.RentalCompany;
 
 @RestController
-@RequestMapping("/RentalCompany")
+@RequestMapping("/rental-company")
 public class RentalCompanyAPI {
     private final RentalCompanyService rentalCompanyService;
 
@@ -17,18 +15,23 @@ public class RentalCompanyAPI {
         this.rentalCompanyService = rentalCompanyService;
     }
 
-    @PostMapping("/rentalCompany/config")
-    public RentalCompany configureRentalCompany(String name, String website, String contactAddress, String owner) {
-        return rentalCompanyService.configureRentalCompany(name, website, contactAddress, owner);
+    @PostMapping("/config")
+    public RentalCompany configureRentalCompany(@RequestBody RentalCompanyConfigRequest rentalCompanyConfigRequest) {
+        return rentalCompanyService.configureRentalCompany(
+                rentalCompanyConfigRequest.getName(),
+                rentalCompanyConfigRequest.getWebsite(),
+                rentalCompanyConfigRequest.getContactAddress(),
+                rentalCompanyConfigRequest.getOwner()
+        );
     }
 
-    @PostMapping("/rentalCompany/openNewBranch")
-    public Branch openNewBranch(String address) {
+    @PostMapping("/open-new-branch")
+    public Branch openNewBranch(@RequestBody String address) {
         return rentalCompanyService.openNewBranch(address);
     }
 
-    @DeleteMapping("/rentalCompany/deleteBranch")
-    public void closeBranch(String address) {
+    @DeleteMapping("/delete-branch")
+    public void closeBranch(@RequestParam String address) {
         rentalCompanyService.closeBranch(address);
     }
 }

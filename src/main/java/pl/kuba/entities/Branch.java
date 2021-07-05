@@ -3,6 +3,7 @@ package pl.kuba.entities;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,6 +16,8 @@ public class Branch extends BaseEntity {
 
     public Branch(String address) {
         this.address = address;
+        this.workers = new ArrayList<>();
+        this.availableCars = new ArrayList<>();
     }
 
     public Branch() {

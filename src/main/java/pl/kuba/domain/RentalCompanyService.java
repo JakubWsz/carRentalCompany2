@@ -6,6 +6,7 @@ import pl.kuba.entities.RentalCompany;
 import pl.kuba.infrastructure.BranchRepository;
 import pl.kuba.infrastructure.RentalCompanyRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +27,7 @@ public class RentalCompanyService {
 
     public Branch openNewBranch(String address) {
         Branch branch = new Branch(address);
+        branch.setModificationDate(LocalDateTime.now());
         return branchRepository.save(branch);
     }
 
@@ -34,7 +36,7 @@ public class RentalCompanyService {
         Optional<Branch> branchToClose = branches.stream()
                 .filter(branch -> branch.getAddress().equals(address))
                 .findFirst();
-        if (branchToClose.isPresent()){
+        if (branchToClose.isPresent()) {
             branchRepository.delete(branchToClose.get());
         } else {
             throw new RuntimeException("Branch doesn't exist");
