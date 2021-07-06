@@ -1,9 +1,14 @@
 package pl.kuba.entities;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import java.util.List;
 
+@Getter
+@Setter
 @Entity
 public class RentalCompany extends BaseEntity {
     private String name;
@@ -22,29 +27,5 @@ public class RentalCompany extends BaseEntity {
 
     public RentalCompany() {
 
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getWebsite() {
-        return website;
-    }
-
-    public String getContactAddress() {
-        return contactAddress;
-    }
-
-    public String getOwner() {
-        return owner;
-    }
-
-    public List<Branch> getBranches() {
-        return branches;
-    }
-
-    public void setBranches(List<Branch> branches) {
-        this.branches = branches;
     }
 }

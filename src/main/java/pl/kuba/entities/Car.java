@@ -1,7 +1,12 @@
 package pl.kuba.entities;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.Entity;
 
+@Getter
+@Setter
 @Entity
 public class Car extends BaseEntity {
     private String brand;
@@ -27,69 +32,5 @@ public class Car extends BaseEntity {
 
     public Car() {
 
-    }
-
-    public String getBrand() {
-        return brand;
-    }
-
-    public void setBrand(String brand) {
-        this.brand = brand;
-    }
-
-    public String getModel() {
-        return model;
-    }
-
-    public void setModel(String model) {
-        this.model = model;
-    }
-
-    public BodyType getBodyType() {
-        return bodyType;
-    }
-
-    public void setBodyType(BodyType bodyType) {
-        this.bodyType = bodyType;
-    }
-
-    public int getProductionYear() {
-        return productionYear;
-    }
-
-    public void setProductionYear(int productionYear) {
-        this.productionYear = productionYear;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public int getCarMileage() {
-        return carMileage;
-    }
-
-    public void setCarMileage(int carMileage) {
-        this.carMileage = carMileage;
-    }
-
-    public Boolean getAvailabilityStatus() {
-        return availabilityStatus;
-    }
-
-    public void setAvailabilityStatus(Boolean availabilityStatus) {
-        this.availabilityStatus = availabilityStatus;
-    }
-
-    public int getAmountPerDay() {
-        return amountPerDay;
-    }
-
-    public void setAmountPerDay(int amountPerDay) {
-        this.amountPerDay = amountPerDay;
     }
 }

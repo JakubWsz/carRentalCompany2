@@ -1,10 +1,15 @@
 package pl.kuba.entities;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import java.util.List;
 
+@Getter
+@Setter
 @Entity
 public class Branch extends BaseEntity {
     private String address;
@@ -19,29 +24,5 @@ public class Branch extends BaseEntity {
 
     public Branch() {
 
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public List<Worker> getWorkers() {
-        return workers;
-    }
-
-    public List<Car> getAvailableCars() {
-        return availableCars;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public void setWorkers(List<Worker> workers) {
-        this.workers = workers;
-    }
-
-    public void setAvailableCars(List<Car> availableCars) {
-        this.availableCars = availableCars;
     }
 }
