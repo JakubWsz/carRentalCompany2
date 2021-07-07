@@ -44,7 +44,7 @@ public class BranchManagementService {
                     workersAfterFireWorker.remove(worker);
                     targetBranch.setWorkers(workersAfterFireWorker);
                 }));
-        workerRepository.delete(firedWorker.get());
+        firedWorker.ifPresent(workerRepository::delete);
     }
 
     private List<Branch> findAllBranches() {

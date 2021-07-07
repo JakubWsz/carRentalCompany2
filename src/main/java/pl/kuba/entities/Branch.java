@@ -3,9 +3,7 @@ package pl.kuba.entities;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.List;
 
 @Getter
@@ -13,7 +11,7 @@ import java.util.List;
 @Entity
 public class Branch extends BaseEntity {
     private String address;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Worker> workers;
     @ManyToMany
     private List<Car> availableCars;
