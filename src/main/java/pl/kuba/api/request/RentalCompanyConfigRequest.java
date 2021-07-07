@@ -1,5 +1,10 @@
 package pl.kuba.api.request;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class RentalCompanyConfigRequest {
    private final String name;
    private final String website;
@@ -11,21 +16,5 @@ public class RentalCompanyConfigRequest {
         this.website = website;
         this.contactAddress = contactAddress;
         this.owner = owner;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getWebsite() {
-        return website;
-    }
-
-    public String getContactAddress() {
-        return contactAddress;
-    }
-
-    public String getOwner() {
-        return owner;
     }
 }
