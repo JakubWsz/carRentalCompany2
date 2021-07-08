@@ -1,4 +1,4 @@
-package pl.kuba.api.request;
+package pl.kuba.api.request.rentalcompany;
 
 import lombok.Getter;
 import lombok.Setter;

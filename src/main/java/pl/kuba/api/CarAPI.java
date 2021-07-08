@@ -32,7 +32,7 @@ public class CarAPI {
         );
     }
 
-    @GetMapping("get-available")
+    @GetMapping("available")
     public List<Car> getAvailableCars(@RequestParam AvailableCarRequest availableCarRequest) throws ParseException {
         return carService.getAvailableCars(
                 availableCarRequest.getBranchLocation(),
@@ -40,7 +40,7 @@ public class CarAPI {
         );
     }
 
-    @GetMapping("get-status")
+    @GetMapping("status")
     public Boolean getCarAvailabilityStatusByParticularDate(
             @RequestParam CarAvailabilityStatusRequest carAvailabilityStatusRequest) throws ParseException {
         return carService.getCarAvailabilityStatusByParticularDate(
@@ -49,7 +49,7 @@ public class CarAPI {
         );
     }
 
-    @PutMapping("update-status")
+    @PutMapping("status")
     public String updateAvailabilityStatus(@RequestParam UpdateCarAvailabilityStatusRequest updateCarAvailabilityStatusRequest) {
         return carService.updateAvailabilityStatus(
                 updateCarAvailabilityStatusRequest.getId(),
@@ -58,7 +58,7 @@ public class CarAPI {
         );
     }
 
-    @PutMapping("update-amount")
+    @PutMapping("amount")
     public void updateCarAmountPerDay(@RequestParam UpdateCarAmountRequest updateCarAmountRequest) {
         carService.updateCarAmountPerDay(
                 updateCarAmountRequest.getId(),
@@ -66,7 +66,7 @@ public class CarAPI {
         );
     }
 
-    @PutMapping("update-mileage")
+    @PutMapping("mileage")
     public void updateCarMileage(@RequestParam UpdateCarMileageRequest updateCarMileageRequest) {
         carService.updateCarMileage(updateCarMileageRequest.getId(),
                 updateCarMileageRequest.getCarMileage()

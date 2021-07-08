@@ -1,7 +1,7 @@
 package pl.kuba.api;
 
 import org.springframework.web.bind.annotation.*;
-import pl.kuba.api.request.RentalCompanyConfigRequest;
+import pl.kuba.api.request.rentalcompany.RentalCompanyConfigRequest;
 import pl.kuba.domain.RentalCompanyService;
 import pl.kuba.entities.Branch;
 import pl.kuba.entities.RentalCompany;
