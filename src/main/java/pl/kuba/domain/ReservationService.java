@@ -36,7 +36,7 @@ public class ReservationService {
         return reservationRepository.save(reservation);
     }
 
-    private void cancelReservation(long reservationId) throws ParseException {
+    public void cancelReservation(long reservationId) throws ParseException {
         Optional<Reservation> optionalReservation = findOptionalReservationById(reservationId);
         Reservation reservation;
         if (optionalReservation.isPresent()) {
@@ -65,5 +65,4 @@ public class ReservationService {
                 .filter(car1 -> car1.getId() == car.getId())
                 .findFirst();
     }
-
 }
