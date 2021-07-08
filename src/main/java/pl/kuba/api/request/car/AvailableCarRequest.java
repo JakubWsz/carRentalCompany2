@@ -1,10 +1,8 @@
 package pl.kuba.api.request.car;
 
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
 public class AvailableCarRequest {
     private final String branchLocation;
     private final String date;

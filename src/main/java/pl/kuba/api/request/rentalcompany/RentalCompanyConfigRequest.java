@@ -1,10 +1,8 @@
 package pl.kuba.api.request.rentalcompany;
 
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
 public class RentalCompanyConfigRequest {
    private final String name;
    private final String website;

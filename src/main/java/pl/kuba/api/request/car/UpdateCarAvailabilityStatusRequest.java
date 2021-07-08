@@ -1,10 +1,8 @@
 package pl.kuba.api.request.car;
 
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
 public class UpdateCarAvailabilityStatusRequest {
     private final long id;
     private final Boolean availabilityStatus;
