@@ -8,6 +8,7 @@ import pl.kuba.infrastructure.BranchRepository;
 import pl.kuba.infrastructure.CarRepository;
 import pl.kuba.infrastructure.ReservationRepository;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,12 +20,14 @@ public class CarService {
     private final CarRepository carRepository;
     private final BranchRepository branchRepository;
     private final ReservationRepository reservationRepository;
+    private final RevenueService revenueService;
 
     public CarService(CarRepository carRepository, BranchRepository branchRepository,
-                      ReservationRepository reservationRepository) {
+                      ReservationRepository reservationRepository, RevenueService revenueService) {
         this.carRepository = carRepository;
         this.branchRepository = branchRepository;
         this.reservationRepository = reservationRepository;
+        this.revenueService = revenueService;
     }
 
     public void updateCarMileage(long id, int carMileage) {
@@ -77,6 +80,16 @@ public class CarService {
         return cars;
     }
 
+    public Car buyCar(Car car, BigDecimal price){
+        revenueService.invest(price);
+       return carRepository.save(car);
+    }
+
+    public void sellCar(Car car, BigDecimal price){
+        revenueService.addPayment(price);
+        carRepository.delete(car);
+    }
+
     private void throwExceptionThereIsNoCarWithPassedId() {
         throw new RuntimeException(("There is no car with passed id"));
     }
@@ -127,4 +140,3 @@ public class CarService {
                 .findFirst();
     }
 }
-
