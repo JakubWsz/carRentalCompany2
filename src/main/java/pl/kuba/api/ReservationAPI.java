@@ -1,9 +1,11 @@
 package pl.kuba.api;
 
 import org.springframework.web.bind.annotation.*;
+import pl.kuba.api.request.reservation.ConfirmCarReceiptRequest;
 import pl.kuba.api.request.reservation.MakeReservationRequest;
 import pl.kuba.domain.ReservationService;
 import pl.kuba.entities.Reservation;
+import pl.kuba.entities.Return;
 
 import java.text.ParseException;
 
@@ -24,12 +26,25 @@ public class ReservationAPI {
                 makeReservationRequest.getRentDate(),
                 makeReservationRequest.getReturnDate(),
                 makeReservationRequest.getRentingBranch(),
-                makeReservationRequest.getReceivingBranch()
+                makeReservationRequest.getReceivingBranch(),
+                makeReservationRequest.getRentingWorker(),
+                makeReservationRequest.getComment()
         );
     }
 
     @DeleteMapping("/cancel")
-    private void cancelReservation(long reservationId) throws ParseException {
+    public void cancelReservation(@RequestParam long reservationId) throws ParseException {
         reservationService.cancelReservation(reservationId);
+    }
+
+    @PostMapping("/confirm-receipt")
+    public Return confirmCarReceipt(@RequestBody ConfirmCarReceiptRequest confirmCarReceiptRequest) {
+        return reservationService.confirmCarReceipt(
+                confirmCarReceiptRequest.getWorker(),
+                confirmCarReceiptRequest.getReturnDate(),
+                confirmCarReceiptRequest.getReservation(),
+                confirmCarReceiptRequest.getSurcharge(),
+                confirmCarReceiptRequest.getComment()
+        );
     }
 }

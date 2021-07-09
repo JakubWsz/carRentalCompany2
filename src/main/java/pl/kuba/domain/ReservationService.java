@@ -1,12 +1,11 @@
 package pl.kuba.domain;
 
 import org.springframework.stereotype.Service;
-import pl.kuba.entities.Branch;
-import pl.kuba.entities.Car;
-import pl.kuba.entities.Client;
-import pl.kuba.entities.Reservation;
+import pl.kuba.entities.*;
 import pl.kuba.infrastructure.CarRepository;
+import pl.kuba.infrastructure.RentRepository;
 import pl.kuba.infrastructure.ReservationRepository;
+import pl.kuba.infrastructure.ReturnRepository;
 
 import java.text.ParseException;
 import java.util.Date;
@@ -16,14 +15,20 @@ import java.util.Optional;
 public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final CarRepository carRepository;
+    private final RentRepository rentRepository;
+    private final ReturnRepository returnRepository;
 
-    public ReservationService(ReservationRepository reservationRepository, CarRepository carRepository) {
+    public ReservationService(ReservationRepository reservationRepository, CarRepository carRepository,
+                              RentRepository rentRepository, ReturnRepository returnRepository) {
         this.reservationRepository = reservationRepository;
         this.carRepository = carRepository;
+        this.rentRepository = rentRepository;
+        this.returnRepository = returnRepository;
     }
 
     public Reservation makeReservation(Client client, Car car, String rentDate, String returnDate,
-                                       Branch rentingBranch, Branch receivingBranch) throws ParseException {
+                                       Branch rentingBranch, Branch receivingBranch, Worker rentingWorker,
+                                       String comment) throws ParseException {
         Optional<Car> optionalCar = getOptionalCar(car);
         Car actualCar;
         if (optionalCar.isPresent())
@@ -33,7 +38,20 @@ public class ReservationService {
         Date returnDateAsDate = StringToDateConverter.convertStringToDate(returnDate);
         Reservation reservation = new Reservation(getTodayDate(), client, car, rentDateAsDate, returnDateAsDate, rentingBranch,
                 receivingBranch, actualCar.getAmountPerDay());
+        Rent rent = rentCreator(rentingWorker, rentDateAsDate, reservation, comment);
+        rentRepository.save(rent);
         return reservationRepository.save(reservation);
+    }
+
+    public Return confirmCarReceipt(Worker worker, Date returnDate, Reservation reservation,
+                                  int surcharge, String comment) {
+        Return returnVariable = new Return();
+        returnVariable.setWorker(worker);
+        returnVariable.setReturnDate(returnDate);
+        returnVariable.setReservation(reservation);
+        returnVariable.setSurcharge(surcharge);
+        returnVariable.setComment(comment);
+       return returnRepository.save(returnVariable);
     }
 
     public void cancelReservation(long reservationId) throws ParseException {
@@ -64,5 +82,14 @@ public class ReservationService {
         return carRepository.findAll().stream()
                 .filter(car1 -> car1.getId() == car.getId())
                 .findFirst();
+    }
+
+    private Rent rentCreator(Worker worker, Date rentDate, Reservation reservation, String comment) {
+        Rent rent = new Rent();
+        rent.setWorker(worker);
+        rent.setReservation(reservation);
+        rent.setRentDate(rentDate);
+        rent.setComment(comment);
+        return rent;
     }
 }

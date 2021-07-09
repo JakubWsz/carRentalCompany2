@@ -4,8 +4,6 @@ import org.springframework.stereotype.Service;
 import pl.kuba.entities.Branch;
 import pl.kuba.entities.Worker;
 import pl.kuba.infrastructure.BranchRepository;
-import pl.kuba.infrastructure.CarRepository;
-import pl.kuba.infrastructure.ReservationRepository;
 import pl.kuba.infrastructure.WorkerRepository;
 
 import java.util.List;
