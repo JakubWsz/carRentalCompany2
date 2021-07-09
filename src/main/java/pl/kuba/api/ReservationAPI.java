@@ -18,7 +18,7 @@ public class ReservationAPI {
         this.reservationService = reservationService;
     }
 
-    @PostMapping
+    @PostMapping("/reserve")
     public Reservation makeReservation(@RequestBody MakeReservationRequest makeReservationRequest) throws ParseException {
         return reservationService.makeReservation(
                 makeReservationRequest.getClient(),
@@ -32,12 +32,12 @@ public class ReservationAPI {
         );
     }
 
-    @DeleteMapping
+    @DeleteMapping("/cancel")
     public void cancelReservation(@RequestParam long reservationId) throws ParseException {
         reservationService.cancelReservation(reservationId);
     }
 
-    @PostMapping
+    @PostMapping("/confirm-receipt")
     public Return confirmCarReceipt(@RequestBody ConfirmCarReceiptRequest confirmCarReceiptRequest) {
         return reservationService.confirmCarReceipt(
                 confirmCarReceiptRequest.getWorker(),
