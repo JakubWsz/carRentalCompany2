@@ -28,4 +28,15 @@ public class RentalCompany extends BaseEntity {
     public RentalCompany() {
 
     }
+
+    @Override
+    public String toString() {
+        return "RentalCompany{" +
+                "name='" + name + '\'' +
+                ", website='" + website + '\'' +
+                ", contactAddress='" + contactAddress + '\'' +
+                ", owner='" + owner + '\'' +
+                ", branches=" + branches +
+                '}';
+    }
 }
