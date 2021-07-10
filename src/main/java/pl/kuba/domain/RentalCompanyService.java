@@ -42,4 +42,18 @@ public class RentalCompanyService {
             throw new RuntimeException("Branch doesn't exist");
         }
     }
+
+    public void updateRentalCompany(String finByThisName, String newWebsiteName, String newContactAddress,
+                                    String newOwner, String newName) {
+        Optional<RentalCompany> optionalRentalCompany = rentalCompanyRepository.findByName(finByThisName);
+        if (optionalRentalCompany.isPresent()) {
+            RentalCompany rentalCompany = optionalRentalCompany.get();
+            rentalCompany.setName(newName);
+            rentalCompany.setWebsite(newWebsiteName);
+            rentalCompany.setContactAddress(newContactAddress);
+            rentalCompany.setOwner(newOwner);
+            rentalCompanyRepository.save(rentalCompany);
+        }
+
+    }
 }
