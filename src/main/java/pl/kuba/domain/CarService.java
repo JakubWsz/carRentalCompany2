@@ -1,6 +1,7 @@
 package pl.kuba.domain;
 
 import org.springframework.stereotype.Service;
+import pl.kuba.entities.AvailabilityStatus;
 import pl.kuba.entities.Branch;
 import pl.kuba.entities.Car;
 import pl.kuba.entities.Reservation;
@@ -37,14 +38,16 @@ public class CarService {
         } else throwExceptionThereIsNoCarWithPassedId();
     }
 
-    public void updateCarAmountPerDay(long id, int carAmountPerDay) {
+    public void updateCarAmountPerDay(long id, int carAmountPerDayGoldCoin, int carAmountPerDayPennyCoin) {
+        BigDecimal carAmountPerDay =
+                new BigDecimal(String.format("%d.%d",carAmountPerDayGoldCoin,carAmountPerDayPennyCoin));
         Optional<Car> optionalCar = getOptionalCar(id);
         if (optionalCar.isPresent()) {
             optionalCar.get().setAmountPerDay(carAmountPerDay);
-        }else throwExceptionThereIsNoCarWithPassedId();
+        } else throwExceptionThereIsNoCarWithPassedId();
     }
 
-    public String updateAvailabilityStatus(long id, Boolean availabilityStatus, String note) {
+    public String updateAvailabilityStatus(long id, AvailabilityStatus availabilityStatus, String note) {
         StringBuilder carNote = new StringBuilder("");
         Optional<Car> optionalCar = getOptionalCar(id);
         if (optionalCar.isPresent()) {
@@ -54,8 +57,8 @@ public class CarService {
         return carNote.toString();
     }
 
-    public Boolean getCarAvailabilityStatusByParticularDate(long id, String date) throws ParseException {
-        Boolean availabilityStatus = null;
+    public AvailabilityStatus getCarAvailabilityStatusByParticularDate(long id, String date) throws ParseException {
+        AvailabilityStatus availabilityStatus = null;
         //null - available
         //true - rent
         //false broken
@@ -80,12 +83,12 @@ public class CarService {
         return cars;
     }
 
-    public Car buyCar(Car car, BigDecimal price){
+    public Car buyCar(Car car, BigDecimal price) {
         revenueService.invest(price);
-       return carRepository.save(car);
+        return carRepository.save(car);
     }
 
-    public void sellCar(Car car, BigDecimal price){
+    public void sellCar(Car car, BigDecimal price) {
         revenueService.addPayment(price);
         carRepository.delete(car);
     }

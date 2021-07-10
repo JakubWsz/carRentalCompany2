@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Getter
@@ -11,20 +12,20 @@ import java.util.Date;
 @Entity
 public class Reservation extends BaseEntity{
     private Date reservationDate;
-    @ManyToOne
+    @OneToOne
     private Client client;
-    @ManyToOne
+    @OneToOne
     private Car car;
     private Date rentDate;
     private Date returnDate;
-    @ManyToOne
+    @OneToOne
     private Branch rentingBranch;
-    @ManyToOne
+    @OneToOne
     private Branch receivingBranch;
-    private int amountToPay;
+    private BigDecimal amountToPay;
 
     public Reservation(Date reservationDate, Client client, Car car, Date rentDate, Date returnDate,
-                       Branch rentingBranch, Branch receivingBranch, int amountToPay) {
+                       Branch rentingBranch, Branch receivingBranch, BigDecimal amountToPay) {
         this.reservationDate = reservationDate;
         this.client = client;
         this.car = car;
