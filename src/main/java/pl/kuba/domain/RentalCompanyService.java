@@ -9,6 +9,8 @@ import pl.kuba.infrastructure.RentalCompanyRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class RentalCompanyService {
@@ -22,6 +24,7 @@ public class RentalCompanyService {
 
     public RentalCompany configureRentalCompany(String name, String website, String contactAddress, String owner) {
         RentalCompany rentalCompany = new RentalCompany(name, website, contactAddress, owner);
+        validateRentalCompanyData(name,website, contactAddress,owner);
         return rentalCompanyRepository.save(rentalCompany);
     }
 
@@ -52,8 +55,23 @@ public class RentalCompanyService {
             rentalCompany.setWebsite(newWebsiteName);
             rentalCompany.setContactAddress(newContactAddress);
             rentalCompany.setOwner(newOwner);
+            rentalCompany.setModificationDate(LocalDateTime.now());
             rentalCompanyRepository.save(rentalCompany);
         }
+    }
 
+    private void validateRentalCompanyData(String name, String website, String contactAddress, String owner) {
+        Pattern pattern = Pattern.compile("^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]"
+                , Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(website);
+        if (!matcher.find()) {
+            throw new RuntimeException("URL is invalid");
+        }
+        if (name == null)
+            throw new RuntimeException(("Name is null"));
+        if (contactAddress == null)
+            throw new RuntimeException(("Contact address is null"));
+        if (owner == null)
+            throw new RuntimeException(("Owner is null"));
     }
 }
