@@ -3,10 +3,7 @@ package pl.kuba.entities;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import java.util.ArrayList;
+import javax.persistence.*;
 import java.util.List;
 
 @Getter
@@ -14,18 +11,14 @@ import java.util.List;
 @Entity
 public class Branch extends BaseEntity {
     private String address;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Worker> workers;
     @ManyToMany
     private List<Car> availableCars;
 
     public Branch(String address) {
         this.address = address;
-        this.workers = new ArrayList<>();
-        this.availableCars = new ArrayList<>();
     }
 
-    public Branch() {
-
-    }
+    public Branch() {}
 }
