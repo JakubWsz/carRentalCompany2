@@ -10,7 +10,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
-public class Reservation extends BaseEntity{
+public class Reservation extends BaseEntity {
     private Date reservationDate;
     @OneToOne
     private Client client;
@@ -18,9 +18,9 @@ public class Reservation extends BaseEntity{
     private Car car;
     private Date rentDate;
     private Date returnDate;
-    @OneToOne
+    @ManyToOne
     private Branch rentingBranch;
-    @OneToOne
+    @ManyToOne
     private Branch receivingBranch;
     private BigDecimal amountToPay;
 
