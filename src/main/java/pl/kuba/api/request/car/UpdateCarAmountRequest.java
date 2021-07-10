@@ -7,5 +7,6 @@ import lombok.Getter;
 @AllArgsConstructor
 public class UpdateCarAmountRequest {
     private final long id;
-    private final int carAmountPerDay;
+    private final int carAmountPerDayGoldCoin;
+    private final int carAmountPerDayPennyCoin;
 }

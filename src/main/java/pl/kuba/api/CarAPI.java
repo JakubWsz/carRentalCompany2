@@ -3,6 +3,7 @@ package pl.kuba.api;
 import org.springframework.web.bind.annotation.*;
 import pl.kuba.api.request.car.*;
 import pl.kuba.domain.CarService;
+import pl.kuba.entities.AvailabilityStatus;
 import pl.kuba.entities.Car;
 
 import java.text.ParseException;
@@ -41,7 +42,7 @@ public class CarAPI {
     }
 
     @GetMapping("status")
-    public Boolean getCarAvailabilityStatusByParticularDate(
+    public AvailabilityStatus getCarAvailabilityStatusByParticularDate(
             @RequestParam CarAvailabilityStatusRequest carAvailabilityStatusRequest) throws ParseException {
         return carService.getCarAvailabilityStatusByParticularDate(
                 carAvailabilityStatusRequest.getId(),
@@ -62,7 +63,8 @@ public class CarAPI {
     public void updateCarAmountPerDay(@RequestParam UpdateCarAmountRequest updateCarAmountRequest) {
         carService.updateCarAmountPerDay(
                 updateCarAmountRequest.getId(),
-                updateCarAmountRequest.getCarAmountPerDay()
+                updateCarAmountRequest.getCarAmountPerDayGoldCoin(),
+                updateCarAmountRequest.getCarAmountPerDayPennyCoin()
         );
     }
 
