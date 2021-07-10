@@ -34,4 +34,14 @@ public class RentalCompanyAPI {
     public void closeBranch(@RequestParam String address) {
         rentalCompanyService.closeBranch(address);
     }
+
+    @PutMapping("/update-company")
+    public RentalCompany updateRentalCompany(@RequestBody RentalCompanyConfigRequest rentalCompanyConfigRequest){
+        return rentalCompanyService.configureRentalCompany(
+                rentalCompanyConfigRequest,
+                rentalCompanyConfigRequest.getWebsite(),
+                rentalCompanyConfigRequest.getContactAddress(),
+                rentalCompanyConfigRequest.getOwner()
+        );
+    }
 }
