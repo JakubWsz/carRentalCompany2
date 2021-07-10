@@ -2,6 +2,7 @@ package pl.kuba.api;
 
 import org.springframework.web.bind.annotation.*;
 import pl.kuba.api.request.rentalcompany.RentalCompanyConfigRequest;
+import pl.kuba.api.request.rentalcompany.RentalCompanyUpdateRequest;
 import pl.kuba.domain.RentalCompanyService;
 import pl.kuba.entities.Branch;
 import pl.kuba.entities.RentalCompany;
@@ -36,12 +37,13 @@ public class RentalCompanyAPI {
     }
 
     @PutMapping("/update-company")
-    public RentalCompany updateRentalCompany(@RequestBody RentalCompanyConfigRequest rentalCompanyConfigRequest){
-        return rentalCompanyService.configureRentalCompany(
-                rentalCompanyConfigRequest,
-                rentalCompanyConfigRequest.getWebsite(),
-                rentalCompanyConfigRequest.getContactAddress(),
-                rentalCompanyConfigRequest.getOwner()
+    public void updateRentalCompany(@RequestBody RentalCompanyUpdateRequest rentalCompanyUpdateRequest) {
+        rentalCompanyService.updateRentalCompany(
+                rentalCompanyUpdateRequest.getFinByThisName(),
+                rentalCompanyUpdateRequest.getNewWebsiteName(),
+                rentalCompanyUpdateRequest.getNewContactAddress(),
+                rentalCompanyUpdateRequest.getNewOwner(),
+                rentalCompanyUpdateRequest.getNewName()
         );
     }
 }
