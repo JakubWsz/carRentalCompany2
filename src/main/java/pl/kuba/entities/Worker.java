@@ -12,7 +12,7 @@ public class Worker extends BaseEntity{
     private String firstname;
     private String lastname;
     private boolean manager;
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Branch branch;
 
     public Worker(String firstname, String lastname, boolean manager, Branch branch) {
