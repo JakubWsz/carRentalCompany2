@@ -24,7 +24,7 @@ public class RentalCompanyService {
 
     public RentalCompany configureRentalCompany(String name, String website, String contactAddress, String owner) {
         RentalCompany rentalCompany = new RentalCompany(name, website, contactAddress, owner);
-        validateRentalCompanyData(name,website, contactAddress,owner);
+        validateRentalCompanyData(name, website, contactAddress, owner);
         return rentalCompanyRepository.save(rentalCompany);
     }
 
@@ -46,8 +46,8 @@ public class RentalCompanyService {
         }
     }
 
-    public void updateRentalCompany(String finByThisName, String newWebsiteName, String newContactAddress,
-                                    String newOwner, String newName) {
+    public RentalCompany updateRentalCompany(String finByThisName, String newWebsiteName, String newContactAddress,
+                                             String newOwner, String newName) {
         Optional<RentalCompany> optionalRentalCompany = rentalCompanyRepository.findByName(finByThisName);
         if (optionalRentalCompany.isPresent()) {
             RentalCompany rentalCompany = optionalRentalCompany.get();
@@ -56,8 +56,9 @@ public class RentalCompanyService {
             rentalCompany.setContactAddress(newContactAddress);
             rentalCompany.setOwner(newOwner);
             rentalCompany.setModificationDate(LocalDateTime.now());
-            rentalCompanyRepository.save(rentalCompany);
-        }
+            return rentalCompanyRepository.save(rentalCompany);
+        } else
+        throw new RuntimeException("This rental company doesn't exist");
     }
 
     private void validateRentalCompanyData(String name, String website, String contactAddress, String owner) {

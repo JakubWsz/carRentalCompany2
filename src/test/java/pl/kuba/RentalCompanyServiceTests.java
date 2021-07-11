@@ -9,9 +9,13 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import pl.kuba.domain.RentalCompanyService;
+import pl.kuba.entities.Branch;
 import pl.kuba.entities.RentalCompany;
 import pl.kuba.infrastructure.BranchRepository;
 import pl.kuba.infrastructure.RentalCompanyRepository;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
@@ -128,5 +132,45 @@ class RentalCompanyServiceTests {
 
         //then
         Assertions.assertEquals("Owner is null", runtimeException.getMessage());
+    }
+
+    @Test
+    void updateBranchShouldBeNotNullAndHaveDifferentValuesThanConfigureBranch() {
+        String name = "x";
+        String website = "https://www.something.com";
+        String contactAddress = "123 xd";
+        String owner = "asd asd";
+        String newWebsiteName = "https://www.somethingNew.com";
+        String newContactAddress = "321 dx";
+        String newOwner = "qwe qwe";
+        String newName = "y";
+        RentalCompany rentalCompany = new RentalCompany(name, website, contactAddress, owner);
+        when(rentalCompanyRepository.save(rentalCompany)).thenReturn(rentalCompany);
+        when(rentalCompanyRepository.findByName(name)).thenReturn(java.util.Optional.of(rentalCompany));
+
+        //when
+        RentalCompany rentalCompany1 =
+                rentalCompanyService.updateRentalCompany("x",newWebsiteName,newContactAddress,newOwner,newName);
+
+        //then
+        Assertions.assertNotNull(rentalCompany1);
+        Assertions.assertNotEquals(name,newName);
+        Assertions.assertNotEquals(website,newWebsiteName);
+        Assertions.assertNotEquals(contactAddress,newContactAddress);
+        Assertions.assertNotEquals(owner,newOwner);
+    }
+
+    @Test
+    void openNewBranchShouldBeNotNull() {
+        //given
+        String contactAddress = "contactAddress";
+        Branch branch = new Branch(contactAddress);
+        when(branchRepository.save(branch)).thenReturn(branch);
+
+        //when
+        Branch branch1 = (rentalCompanyService.openNewBranch(contactAddress));
+
+        //then
+        Assertions.assertNotNull(branch1);
     }
 }
