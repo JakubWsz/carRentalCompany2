@@ -44,6 +44,7 @@ public class RentalCompanyService {
             return "Branch is closed";
         } else {
             throw new RuntimeException("Branch doesn't exist");
+            
         }
     }
 
