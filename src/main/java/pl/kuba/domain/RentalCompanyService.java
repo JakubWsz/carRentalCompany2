@@ -34,13 +34,14 @@ public class RentalCompanyService {
         return branchRepository.save(branch);
     }
 
-    public void closeBranch(String address) {
+    public String closeBranch(String address) {
         List<Branch> branches = branchRepository.findAll();
         Optional<Branch> branchToClose = branches.stream()
                 .filter(branch -> branch.getAddress().equals(address))
                 .findFirst();
         if (branchToClose.isPresent()) {
             branchRepository.delete(branchToClose.get());
+            return "Branch is closed";
         } else {
             throw new RuntimeException("Branch doesn't exist");
         }

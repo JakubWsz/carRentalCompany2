@@ -14,10 +14,11 @@ import pl.kuba.entities.RentalCompany;
 import pl.kuba.infrastructure.BranchRepository;
 import pl.kuba.infrastructure.RentalCompanyRepository;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -135,7 +136,7 @@ class RentalCompanyServiceTests {
     }
 
     @Test
-    void updateBranchShouldBeNotNullAndHaveDifferentValuesThanConfigureBranch() {
+    void updateRentalCompanyShouldBeNotNullAndHaveDifferentValuesThanConfigureBranch() {
         String name = "x";
         String website = "https://www.something.com";
         String contactAddress = "123 xd";
@@ -150,14 +151,14 @@ class RentalCompanyServiceTests {
 
         //when
         RentalCompany rentalCompany1 =
-                rentalCompanyService.updateRentalCompany("x",newWebsiteName,newContactAddress,newOwner,newName);
+                rentalCompanyService.updateRentalCompany("x", newWebsiteName, newContactAddress, newOwner, newName);
 
         //then
         Assertions.assertNotNull(rentalCompany1);
-        Assertions.assertNotEquals(name,newName);
-        Assertions.assertNotEquals(website,newWebsiteName);
-        Assertions.assertNotEquals(contactAddress,newContactAddress);
-        Assertions.assertNotEquals(owner,newOwner);
+        Assertions.assertNotEquals(name, newName);
+        Assertions.assertNotEquals(website, newWebsiteName);
+        Assertions.assertNotEquals(contactAddress, newContactAddress);
+        Assertions.assertNotEquals(owner, newOwner);
     }
 
     @Test
@@ -165,12 +166,32 @@ class RentalCompanyServiceTests {
         //given
         String contactAddress = "contactAddress";
         Branch branch = new Branch(contactAddress);
-        when(branchRepository.save(branch)).thenReturn(branch);
+        when(branchRepository.save(any(Branch.class))).thenReturn(branch);
 
         //when
         Branch branch1 = (rentalCompanyService.openNewBranch(contactAddress));
 
         //then
         Assertions.assertNotNull(branch1);
+    }
+
+    @Test
+    void updateNewBranchShouldBeNotNull() {
+        //given
+        String contactAddress = "contactAddress";
+        Branch branch = new Branch(contactAddress);
+        when(branchRepository.save(any(Branch.class))).thenReturn(branch);
+        Branch branch1 = (rentalCompanyService.openNewBranch(contactAddress));
+        List<Branch> branches = new ArrayList<>();
+        branches.add(branch1);
+        (when(branchRepository.findAll()).thenReturn(new ArrayList<>())).thenReturn(branches);
+
+        //when
+
+        System.out.println(branch1);
+        String isClosed = (rentalCompanyService.closeBranch(branch1.getAddress()));
+        System.out.println(branch1);
+        //then
+        Assertions.assertEquals("Branch is closed", isClosed);
     }
 }
