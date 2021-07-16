@@ -16,12 +16,13 @@ import pl.kuba.infrastructure.RentalCompanyRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+//@SpringBootTest
 class RentalCompanyServiceTests {
     @InjectMocks
     private RentalCompanyService rentalCompanyService;
@@ -137,6 +138,7 @@ class RentalCompanyServiceTests {
 
     @Test
     void updateRentalCompanyShouldBeNotNullAndHaveDifferentValuesThanConfigureBranch() {
+        //given
         String name = "x";
         String website = "https://www.something.com";
         String contactAddress = "123 xd";
@@ -176,21 +178,19 @@ class RentalCompanyServiceTests {
     }
 
     @Test
-    void updateNewBranchShouldBeNotNull() {
+    void closeBranchShouldReturnBranchIsClosed() {
         //given
         String contactAddress = "contactAddress";
         Branch branch = new Branch(contactAddress);
         when(branchRepository.save(any(Branch.class))).thenReturn(branch);
         Branch branch1 = (rentalCompanyService.openNewBranch(contactAddress));
-        List<Branch> branches = new ArrayList<>();
-        branches.add(branch1);
-        (when(branchRepository.findAll()).thenReturn(new ArrayList<>())).thenReturn(branches);
+        Optional<Branch> optionalBranch;
+        optionalBranch = Optional.of(branch1);
+        when(branchRepository.findByAddress(contactAddress)).thenReturn(optionalBranch);
 
         //when
-
-        System.out.println(branch1);
         String isClosed = (rentalCompanyService.closeBranch(branch1.getAddress()));
-        System.out.println(branch1);
+
         //then
         Assertions.assertEquals("Branch is closed", isClosed);
     }

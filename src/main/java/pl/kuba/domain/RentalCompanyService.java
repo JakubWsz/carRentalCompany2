@@ -35,16 +35,17 @@ public class RentalCompanyService {
     }
 
     public String closeBranch(String address) {
-        List<Branch> branches = branchRepository.findAll();
-        Optional<Branch> branchToClose = branches.stream()
-                .filter(branch -> branch.getAddress().equals(address))
-                .findFirst();
+       // List<Branch> branches = branchRepository.findAll();
+        Optional<Branch> branchToClose = branchRepository.findByAddress(address);
+//                = branches.stream()
+//                .filter(branch -> branch.getAddress().equals(address))
+//                .findFirst();
         if (branchToClose.isPresent()) {
             branchRepository.delete(branchToClose.get());
             return "Branch is closed";
         } else {
             throw new RuntimeException("Branch doesn't exist");
-            
+
         }
     }
 
