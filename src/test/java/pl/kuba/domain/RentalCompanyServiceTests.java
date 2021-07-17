@@ -1,4 +1,4 @@
-package pl.kuba;
+package pl.kuba.domain;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -7,26 +7,17 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import pl.kuba.domain.RentalCompanyService;
 import pl.kuba.entities.Branch;
 import pl.kuba.entities.RentalCompany;
 import pl.kuba.infrastructure.BranchRepository;
 import pl.kuba.infrastructure.RentalCompanyRepository;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
-//@SpringBootTest
 class RentalCompanyServiceTests {
     @InjectMocks
     private RentalCompanyService rentalCompanyService;
