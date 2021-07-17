@@ -1,13 +1,14 @@
 package pl.kuba.domain;
 
 import org.springframework.stereotype.Service;
+import pl.kuba.api.request.rentalcompany.RentalCompanyUpdateRequest;
 import pl.kuba.entities.Branch;
 import pl.kuba.entities.RentalCompany;
-import pl.kuba.infrastructure.BranchRepository;
-import pl.kuba.infrastructure.RentalCompanyRepository;
+import pl.kuba.infrastructure.persistence.BranchRepository;
+import pl.kuba.infrastructure.persistence.ClosedBranchRepository;
+import pl.kuba.infrastructure.persistence.RentalCompanyRepository;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -16,10 +17,13 @@ import java.util.regex.Pattern;
 public class RentalCompanyService {
     private final RentalCompanyRepository rentalCompanyRepository;
     private final BranchRepository branchRepository;
+    private final ClosedBranchRepository closedBranchRepository;
 
-    public RentalCompanyService(RentalCompanyRepository rentalCompanyRepository, BranchRepository branchRepository) {
+    public RentalCompanyService(RentalCompanyRepository rentalCompanyRepository, BranchRepository branchRepository,
+                                ClosedBranchRepository closedBranchRepository) {
         this.rentalCompanyRepository = rentalCompanyRepository;
         this.branchRepository = branchRepository;
+        this.closedBranchRepository = closedBranchRepository;
     }
 
     public RentalCompany configureRentalCompany(String name, String website, String contactAddress, String owner) {
@@ -35,13 +39,10 @@ public class RentalCompanyService {
     }
 
     public String closeBranch(String address) {
-       // List<Branch> branches = branchRepository.findAll();
-        Optional<Branch> branchToClose = branchRepository.findByAddress(address);
-//                = branches.stream()
-//                .filter(branch -> branch.getAddress().equals(address))
-//                .findFirst();
+        Optional<Branch> branchToClose = closedBranchRepository.findByAddress(address);
+
         if (branchToClose.isPresent()) {
-            branchRepository.delete(branchToClose.get());
+            closedBranchRepository.save(branchToClose.get());
             return "Branch is closed";
         } else {
             throw new RuntimeException("Branch doesn't exist");
@@ -49,19 +50,19 @@ public class RentalCompanyService {
         }
     }
 
-    public RentalCompany updateRentalCompany(String finByThisName, String newWebsiteName, String newContactAddress,
-                                             String newOwner, String newName) {
-        Optional<RentalCompany> optionalRentalCompany = rentalCompanyRepository.findByName(finByThisName);
+    public RentalCompany updateRentalCompany(RentalCompanyUpdateRequest rentalCompanyUpdateRequest) {
+        Optional<RentalCompany> optionalRentalCompany = rentalCompanyRepository.findByName(rentalCompanyUpdateRequest
+                .getOldName());
         if (optionalRentalCompany.isPresent()) {
             RentalCompany rentalCompany = optionalRentalCompany.get();
-            rentalCompany.setName(newName);
-            rentalCompany.setWebsite(newWebsiteName);
-            rentalCompany.setContactAddress(newContactAddress);
-            rentalCompany.setOwner(newOwner);
+            rentalCompany.setName(rentalCompanyUpdateRequest.getNewName());
+            rentalCompany.setWebsite(rentalCompanyUpdateRequest.getNewWebsiteName());
+            rentalCompany.setContactAddress(rentalCompanyUpdateRequest.getNewContactAddress());
+            rentalCompany.setOwner(rentalCompanyUpdateRequest.getNewOwner());
             rentalCompany.setModificationDate(LocalDateTime.now());
             return rentalCompanyRepository.save(rentalCompany);
         } else
-        throw new RuntimeException("This rental company doesn't exist");
+            throw new RuntimeException("This rental company doesn't exist");
     }
 
     private void validateRentalCompanyData(String name, String website, String contactAddress, String owner) {

@@ -2,10 +2,12 @@ package pl.kuba.domain;
 
 import org.springframework.stereotype.Service;
 import pl.kuba.entities.*;
-import pl.kuba.infrastructure.CarRepository;
-import pl.kuba.infrastructure.RentRepository;
-import pl.kuba.infrastructure.ReservationRepository;
-import pl.kuba.infrastructure.ReturnRepository;
+import pl.kuba.infrastructure.DateFormatter;
+import pl.kuba.infrastructure.StringToDateConverter;
+import pl.kuba.infrastructure.persistence.CarRepository;
+import pl.kuba.infrastructure.persistence.RentRepository;
+import pl.kuba.infrastructure.persistence.ReservationRepository;
+import pl.kuba.infrastructure.persistence.ReturnRepository;
 
 import java.text.ParseException;
 import java.util.Date;

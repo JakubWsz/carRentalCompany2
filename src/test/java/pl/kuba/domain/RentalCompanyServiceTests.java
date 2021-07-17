@@ -7,10 +7,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import pl.kuba.api.request.rentalcompany.RentalCompanyUpdateRequest;
 import pl.kuba.entities.Branch;
 import pl.kuba.entities.RentalCompany;
-import pl.kuba.infrastructure.BranchRepository;
-import pl.kuba.infrastructure.RentalCompanyRepository;
+import pl.kuba.infrastructure.persistence.BranchRepository;
+import pl.kuba.infrastructure.persistence.ClosedBranchRepository;
+import pl.kuba.infrastructure.persistence.RentalCompanyRepository;
 
 import java.util.Optional;
 
@@ -25,13 +27,15 @@ class RentalCompanyServiceTests {
     private RentalCompanyRepository rentalCompanyRepository;
     @Mock
     private BranchRepository branchRepository;
+    @Mock
+    private ClosedBranchRepository closedBranchRepository;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
         Mockito.reset(rentalCompanyRepository);
         Mockito.reset(branchRepository);
-        rentalCompanyService = Mockito.spy(new RentalCompanyService(rentalCompanyRepository, branchRepository));
+        rentalCompanyService = Mockito.spy(new RentalCompanyService(rentalCompanyRepository, branchRepository, closedBranchRepository));
     }
 
     @Test
@@ -144,11 +148,14 @@ class RentalCompanyServiceTests {
         String newName = "y";
         RentalCompany rentalCompany = new RentalCompany(name, website, contactAddress, owner);
         when(rentalCompanyRepository.save(rentalCompany)).thenReturn(rentalCompany);
-        when(rentalCompanyRepository.findByName(name)).thenReturn(java.util.Optional.of(rentalCompany));
+        when(rentalCompanyRepository.findByName(rentalCompany.getName())).thenReturn(Optional.of(rentalCompany));
+
+
 
         //when
         RentalCompany rentalCompany1 =
-                rentalCompanyService.updateRentalCompany("x", newWebsiteName, newContactAddress, newOwner, newName);
+                rentalCompanyService.updateRentalCompany(new RentalCompanyUpdateRequest(rentalCompany.getName(),
+                        newWebsiteName, newContactAddress, newOwner, newName));
 
         //then
         Assertions.assertNotNull(rentalCompany1);
@@ -181,7 +188,7 @@ class RentalCompanyServiceTests {
         Branch branch1 = (rentalCompanyService.openNewBranch(contactAddress));
         Optional<Branch> optionalBranch;
         optionalBranch = Optional.of(branch1);
-        when(branchRepository.findByAddress(contactAddress)).thenReturn(optionalBranch);
+        when(closedBranchRepository.findByAddress(contactAddress)).thenReturn(optionalBranch);
 
         //when
         String isClosed = (rentalCompanyService.closeBranch(branch1.getAddress()));

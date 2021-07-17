@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class RentalCompanyUpdateRequest {
-   private final String finByThisName;
+   private final String oldName;
    private final String newWebsiteName;
    private final String newContactAddress;
    private final String newOwner;
