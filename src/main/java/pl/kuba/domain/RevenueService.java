@@ -2,7 +2,7 @@ package pl.kuba.domain;
 
 import org.springframework.stereotype.Service;
 import pl.kuba.entities.Revenue;
-import pl.kuba.infrastructure.RevenueRepository;
+import pl.kuba.infrastructure.persistence.RevenueRepository;
 
 import java.math.BigDecimal;
 import java.util.List;

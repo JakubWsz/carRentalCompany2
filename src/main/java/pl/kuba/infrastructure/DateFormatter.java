@@ -1,4 +1,4 @@
-package pl.kuba.domain;
+package pl.kuba.infrastructure;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

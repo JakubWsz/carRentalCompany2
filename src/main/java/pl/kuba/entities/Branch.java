@@ -21,4 +21,13 @@ public class Branch extends BaseEntity {
     }
 
     public Branch() {}
+
+    @Override
+    public String toString() {
+        return "Branch{" +
+                "address='" + address + '\'' +
+                ", workers=" + workers +
+                ", availableCars=" + availableCars +
+                '}';
+    }
 }

@@ -10,4 +10,6 @@ public class RentalCompanyConfigRequest {
    private final String website;
    private final String contactAddress;
    private final String owner;
+
+
 }
