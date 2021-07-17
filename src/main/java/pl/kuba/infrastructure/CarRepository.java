@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import pl.kuba.entities.Car;
 
 @Repository
-public interface CarRepository extends JpaRepository<Car, Integer> {
+public interface CarRepository extends JpaRepository<Car, Long> {
 }

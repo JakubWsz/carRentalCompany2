@@ -21,14 +21,12 @@ public class CarService {
     private final CarRepository carRepository;
     private final BranchRepository branchRepository;
     private final ReservationRepository reservationRepository;
-    private final RevenueService revenueService;
 
     public CarService(CarRepository carRepository, BranchRepository branchRepository,
-                      ReservationRepository reservationRepository, RevenueService revenueService) {
+                      ReservationRepository reservationRepository) {
         this.carRepository = carRepository;
         this.branchRepository = branchRepository;
         this.reservationRepository = reservationRepository;
-        this.revenueService = revenueService;
     }
 
     public void updateCarMileage(long id, int carMileage) {
@@ -59,9 +57,6 @@ public class CarService {
 
     public AvailabilityStatus getCarAvailabilityStatusByParticularDate(long id, String date) throws ParseException {
         AvailabilityStatus availabilityStatus = null;
-        //null - available
-        //true - rent
-        //false broken
         Date particularDate = StringToDateConverter.convertStringToDate(date);
         Optional<Reservation> optionalReservation = getAllReservations().stream()
                 .filter(reservation -> reservation.getReservationDate().equals(particularDate))
@@ -83,24 +78,12 @@ public class CarService {
         return cars;
     }
 
-    public Car buyCar(Car car, BigDecimal price) {
-        revenueService.invest(price);
-        return carRepository.save(car);
-    }
-
-    public void sellCar(Car car, BigDecimal price) {
-        revenueService.addPayment(price);
-        carRepository.delete(car);
-    }
-
     private void throwExceptionThereIsNoCarWithPassedId() {
         throw new RuntimeException(("There is no car with passed id"));
     }
 
     private Optional<Car> getOptionalCar(long id) {
-        return carRepository.findAll().stream()
-                .filter(car -> car.getId() == id)
-                .findFirst();
+        return carRepository.findById(id);
     }
 
     private Reservation getReservationByDate(String date) throws ParseException {
@@ -108,7 +91,7 @@ public class CarService {
         Reservation reservation;
         if (optionalReservation.isPresent()) {
             reservation = optionalReservation.get();
-        } else throw new RuntimeException("Wrong date format");
+        } else throw new RuntimeException("There is no reservation on this date");
         return reservation;
     }
 

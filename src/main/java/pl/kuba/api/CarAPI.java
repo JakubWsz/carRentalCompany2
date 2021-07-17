@@ -17,22 +17,6 @@ public class CarAPI {
         this.carService = carService;
     }
 
-    @PostMapping("/buy")
-    public Car buyCar(@RequestBody CarBuySellRequest carBuyRequest) {
-        return carService.buyCar(
-                carBuyRequest.getCar(),
-                carBuyRequest.getPrice()
-        );
-    }
-
-    @DeleteMapping("/sell")
-    public void sellCar(@RequestParam CarBuySellRequest carBuyRequest) {
-        carService.sellCar(
-                carBuyRequest.getCar(),
-                carBuyRequest.getPrice()
-        );
-    }
-
     @GetMapping("available")
     public List<Car> getAvailableCars(@RequestParam AvailableCarRequest availableCarRequest) throws ParseException {
         return carService.getAvailableCars(
