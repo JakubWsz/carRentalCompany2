@@ -56,7 +56,8 @@ public class CarService {
         return carNote.toString();
     }
 
-    public HashMap<LocalDate,AvailabilityStatus> getCarAvailabilityStatusByParticularDate(long id, String date) throws ParseException {
+    public HashMap<LocalDate,AvailabilityStatus> getCarAvailabilityStatusByParticularDate(long id, String date)
+            throws ParseException {
         AvailabilityStatus availabilityStatus = null;
         HashMap<LocalDate,AvailabilityStatus> whenCarIsAvailable = null;
         Date particularDate = StringToDateConverter.convertStringToDate(date);
@@ -68,7 +69,10 @@ public class CarService {
                     .filter(reservation -> reservation.getReservationDate().equals(particularDate))
                     .filter(reservation -> reservation.getCar().getId() == id)
                     .findFirst();
-            if (optionalReservation.isPresent()) {
+            if (optionalReservation.ifPresent(
+                    reservation -> reservation.getCar()
+                            .setAvailabilityStatus(availabilityStatus = optionalReservation.get()
+                                    .getCar().getAvailabilityStatus()))) {
                 availabilityStatus = optionalReservation.get().getCar().getAvailabilityStatus();
             }
             whenCarIsAvailable.put(date1,availabilityStatus);
