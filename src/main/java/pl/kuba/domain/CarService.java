@@ -1,10 +1,7 @@
 package pl.kuba.domain;
 
 import org.springframework.stereotype.Service;
-import pl.kuba.entities.AvailabilityStatus;
-import pl.kuba.entities.Branch;
-import pl.kuba.entities.Car;
-import pl.kuba.entities.Reservation;
+import pl.kuba.entities.*;
 import pl.kuba.infrastructure.StringToDateConverter;
 import pl.kuba.infrastructure.persistence.BranchRepository;
 import pl.kuba.infrastructure.persistence.CarRepository;
@@ -12,10 +9,8 @@ import pl.kuba.infrastructure.persistence.ReservationRepository;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.util.*;
 
 @Service
 public class CarService {
@@ -23,13 +18,16 @@ public class CarService {
     private final BranchRepository branchRepository;
     private final ReservationRepository reservationRepository;
     private final RevenueService revenueService;
+    private final CarAvailabilityAsDatesService carAvailabilityAsDatesService;
 
     public CarService(CarRepository carRepository, BranchRepository branchRepository,
-                      ReservationRepository reservationRepository, RevenueService revenueService) {
+                      ReservationRepository reservationRepository, RevenueService revenueService,
+                      CarAvailabilityAsDatesService carAvailabilityAsDatesService) {
         this.carRepository = carRepository;
         this.branchRepository = branchRepository;
         this.reservationRepository = reservationRepository;
         this.revenueService = revenueService;
+        this.carAvailabilityAsDatesService = carAvailabilityAsDatesService;
     }
 
     public void updateCarMileage(long id, int carMileage) {
@@ -41,7 +39,7 @@ public class CarService {
 
     public void updateCarAmountPerDay(long id, int carAmountPerDayGoldCoin, int carAmountPerDayPennyCoin) {
         BigDecimal carAmountPerDay =
-                new BigDecimal(String.format("%d.%d",carAmountPerDayGoldCoin,carAmountPerDayPennyCoin));
+                new BigDecimal(String.format("%d.%d", carAmountPerDayGoldCoin, carAmountPerDayPennyCoin));
         Optional<Car> optionalCar = getOptionalCar(id);
         if (optionalCar.isPresent()) {
             optionalCar.get().setAmountPerDay(carAmountPerDay);
@@ -58,20 +56,24 @@ public class CarService {
         return carNote.toString();
     }
 
-    public AvailabilityStatus getCarAvailabilityStatusByParticularDate(long id, String date) throws ParseException {
+    public HashMap<LocalDate,AvailabilityStatus> getCarAvailabilityStatusByParticularDate(long id, String date) throws ParseException {
         AvailabilityStatus availabilityStatus = null;
-        //null - available
-        //true - rent
-        //false broken
+        HashMap<LocalDate,AvailabilityStatus> whenCarIsAvailable = null;
         Date particularDate = StringToDateConverter.convertStringToDate(date);
-        Optional<Reservation> optionalReservation = getAllReservations().stream()
-                .filter(reservation -> reservation.getReservationDate().equals(particularDate))
-                .filter(reservation -> reservation.getCar().getId() == id)
-                .findFirst();
-        if (optionalReservation.isPresent()) {
-            availabilityStatus = optionalReservation.get().getCar().getAvailabilityStatus();
+
+        CarAvailabilityAsDates dates = carAvailabilityAsDatesService.getDatesRangeCarsPotentialAvailability(id);
+
+        for (LocalDate date1 = dates.getRentDate(); date1.isBefore(dates.getReturnDate()); date1 = date1.plusDays(1)) {
+            Optional<Reservation> optionalReservation = getAllReservations().stream()
+                    .filter(reservation -> reservation.getReservationDate().equals(particularDate))
+                    .filter(reservation -> reservation.getCar().getId() == id)
+                    .findFirst();
+            if (optionalReservation.isPresent()) {
+                availabilityStatus = optionalReservation.get().getCar().getAvailabilityStatus();
+            }
+            whenCarIsAvailable.put(date1,availabilityStatus);
         }
-        return availabilityStatus;
+        return whenCarIsAvailable;
     }
 
     public List<Car> getAvailableCars(String branchLocation, String date) throws ParseException {
