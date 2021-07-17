@@ -38,11 +38,27 @@ class CarServiceTest {
         CarService carService = new CarService(testCarRepository, null, null);
 
         //when
-        carService.updateCarAmountPerDay(1L,145,99);
+        carService.updateCarAmountPerDay(1L, 145, 99);
 
         Assertions.assertEquals(testCarRepository.findById(1L).get().getAmountPerDay()
-                , new BigDecimal(String.format("%d.%d",145,99)));
+                , new BigDecimal(String.format("%d.%d", 145, 99)));
     }
+
+    @Test
+    public void updateAvailabilityStatus() {
+        //given
+        TestCarRepository testCarRepository = new TestCarRepository();
+        CarService carService = new CarService(testCarRepository, null, null);
+
+        //when
+        carService.updateAvailabilityStatus(1L,AvailabilityStatus.AVAILABLE,"");
+
+        //then
+        Assertions.assertEquals(testCarRepository.findById(1L).get().getAvailabilityStatus(), AvailabilityStatus.AVAILABLE );
+    }
+
+    @Test
+    public void
 
     static class TestCarRepository implements CarRepository {
         final List<Car> cars = new ArrayList<>();

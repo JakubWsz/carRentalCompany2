@@ -55,17 +55,18 @@ public class CarService {
         return carNote.toString();
     }
 
-    public AvailabilityStatus getCarAvailabilityStatusByParticularDate(long id, String date) throws ParseException {
-        AvailabilityStatus availabilityStatus = null;
+    public AvailabilityStatus getCarAvailabilityStatusByParticularDate(long carId, String date) throws ParseException {
+        AvailabilityStatus availabilityStatus;
         Date particularDate = StringToDateConverter.convertStringToDate(date);
         Optional<Reservation> optionalReservation = getAllReservations().stream()
                 .filter(reservation -> reservation.getReservationDate().equals(particularDate))
-                .filter(reservation -> reservation.getCar().getId() == id)
+                .filter(reservation -> reservation.getCar().getId() == carId)
                 .findFirst();
         if (optionalReservation.isPresent()) {
             availabilityStatus = optionalReservation.get().getCar().getAvailabilityStatus();
-        }
-        return availabilityStatus;
+            return availabilityStatus;
+        }else throw new RuntimeException("Do konsultacji");
+
     }
 
     public List<Car> getAvailableCars(String branchLocation, String date) throws ParseException {
