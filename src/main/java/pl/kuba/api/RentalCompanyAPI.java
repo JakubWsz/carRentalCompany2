@@ -39,12 +39,6 @@ public class RentalCompanyAPI {
 
     @PutMapping("/update-company")
     public void updateRentalCompany(@RequestBody RentalCompanyUpdateRequest rentalCompanyUpdateRequest) {
-        rentalCompanyService.updateRentalCompany(
-                rentalCompanyUpdateRequest.getFinByThisName(),
-                rentalCompanyUpdateRequest.getNewWebsiteName(),
-                rentalCompanyUpdateRequest.getNewContactAddress(),
-                rentalCompanyUpdateRequest.getNewOwner(),
-                rentalCompanyUpdateRequest.getNewName()
-        );
+        rentalCompanyService.updateRentalCompany(rentalCompanyUpdateRequest);
     }
 }
