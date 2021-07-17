@@ -63,7 +63,7 @@ public class CarService {
 
         CarAvailabilityAsDates dates = carAvailabilityAsDatesService.getDatesRangeCarsPotentialAvailability(id);
 
-        for (LocalDate date1 = dates.getRentDate(); date1.isBefore(dates.getReturnDate()); date1 = date1.plusDays(1)) {
+        for (LocalDate date1 = dates.getRentDate(); date1.isAfter(dates.getReturnDate()); date1 = date1.plusDays(1)) {
             Optional<Reservation> optionalReservation = getAllReservations().stream()
                     .filter(reservation -> reservation.getReservationDate().equals(particularDate))
                     .filter(reservation -> reservation.getCar().getId() == id)
