@@ -3,7 +3,7 @@ package pl.kuba.domain;
 import org.springframework.stereotype.Service;
 import pl.kuba.entities.Branch;
 import pl.kuba.entities.Worker;
-import pl.kuba.infrastructure.BranchRepository;
+import pl.kuba.infrastructure.BranchStore;
 import pl.kuba.infrastructure.WorkerRepository;
 
 import java.util.List;
@@ -11,11 +11,11 @@ import java.util.Optional;
 
 @Service
 public class BranchManagementService {
-    private final BranchRepository branchRepository;
+    private final BranchStore branchStore;
     private final WorkerRepository workerRepository;
 
-    public BranchManagementService(BranchRepository branchRepository, WorkerRepository workerRepository) {
-        this.branchRepository = branchRepository;
+    public BranchManagementService(BranchStore branchRepository, WorkerRepository workerRepository) {
+        this.branchStore = branchRepository;
         this.workerRepository = workerRepository;
     }
 
@@ -48,7 +48,7 @@ public class BranchManagementService {
     }
 
     private List<Branch> findAllBranches() {
-        return branchRepository.findAll();
+        return branchStore.findAll();
     }
 
     private List<Worker> findAllWorkers() {

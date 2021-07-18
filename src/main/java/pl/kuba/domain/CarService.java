@@ -5,7 +5,7 @@ import pl.kuba.entities.AvailabilityStatus;
 import pl.kuba.entities.Branch;
 import pl.kuba.entities.Car;
 import pl.kuba.entities.Reservation;
-import pl.kuba.infrastructure.BranchRepository;
+import pl.kuba.infrastructure.BranchStore;
 import pl.kuba.infrastructure.ReservationRepository;
 
 import java.math.BigDecimal;
@@ -18,14 +18,14 @@ import java.util.Optional;
 @Service
 public class CarService {
     private final CarStore carStore;
-    private final BranchRepository branchRepository;
+    private final BranchStore branchStore;
     private final ReservationRepository reservationRepository;
 
     public CarService(CarStore carStore,
-                      BranchRepository branchRepository,
+                      BranchStore branchRepository,
                       ReservationRepository reservationRepository) {
         this.carStore = carStore;
-        this.branchRepository = branchRepository;
+        this.branchStore = branchRepository;
         this.reservationRepository = reservationRepository;
     }
 
@@ -106,7 +106,7 @@ public class CarService {
     }
 
     private List<Branch> getAllBranches() {
-        return branchRepository.findAll();
+        return branchStore.findAll();
     }
 
     private List<Reservation> getAllReservations() {

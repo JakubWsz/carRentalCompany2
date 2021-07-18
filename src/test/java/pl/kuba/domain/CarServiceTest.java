@@ -1,22 +1,13 @@
 package pl.kuba.domain;
 
-import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import pl.kuba.entities.AvailabilityStatus;
 import pl.kuba.entities.BodyType;
-import pl.kuba.entities.Branch;
 import pl.kuba.entities.Car;
-import pl.kuba.infrastructure.BranchRepository;
-import pl.kuba.infrastructure.CarRepository;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 
 class CarServiceTest {
 
