@@ -7,7 +7,9 @@ import pl.kuba.entities.AvailabilityStatus;
 import pl.kuba.entities.Car;
 
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @RestController("/car")
 public class CarAPI {
@@ -26,7 +28,7 @@ public class CarAPI {
     }
 
     @GetMapping("status")
-    public AvailabilityStatus getCarAvailabilityStatusByParticularDate(
+    public Map<LocalDate, AvailabilityStatus> getCarAvailabilityStatusByParticularDate(
             @RequestParam CarAvailabilityStatusRequest carAvailabilityStatusRequest) throws ParseException {
         return carService.getCarAvailabilityStatusByParticularDate(
                 carAvailabilityStatusRequest.getId(),

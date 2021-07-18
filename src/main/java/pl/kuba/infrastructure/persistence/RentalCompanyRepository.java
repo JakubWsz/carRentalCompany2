@@ -7,6 +7,6 @@ import pl.kuba.entities.RentalCompany;
 import java.util.Optional;
 
 @Repository
-public interface RentalCompanyRepository extends JpaRepository<RentalCompany,Integer> {
+public interface RentalCompanyRepository extends JpaRepository<RentalCompany,Long> {
     Optional<RentalCompany> findByName(String name);
 }

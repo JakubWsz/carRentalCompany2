@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import pl.kuba.entities.Worker;
 
 @Repository
-public interface WorkerRepository extends JpaRepository<Worker, Integer> {
+public interface WorkerRepository extends JpaRepository<Worker, Long> {
 }
