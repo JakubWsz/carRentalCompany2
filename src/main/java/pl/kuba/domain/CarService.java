@@ -6,7 +6,6 @@ import pl.kuba.entities.Branch;
 import pl.kuba.entities.Car;
 import pl.kuba.entities.Reservation;
 import pl.kuba.infrastructure.BranchRepository;
-import pl.kuba.infrastructure.CarRepository;
 import pl.kuba.infrastructure.ReservationRepository;
 
 import java.math.BigDecimal;
@@ -18,13 +17,14 @@ import java.util.Optional;
 
 @Service
 public class CarService {
-    private final CarRepository carRepository;
+    private final CarStore carStore;
     private final BranchRepository branchRepository;
     private final ReservationRepository reservationRepository;
 
-    public CarService(CarRepository carRepository, BranchRepository branchRepository,
+    public CarService(CarStore carStore,
+                      BranchRepository branchRepository,
                       ReservationRepository reservationRepository) {
-        this.carRepository = carRepository;
+        this.carStore = carStore;
         this.branchRepository = branchRepository;
         this.reservationRepository = reservationRepository;
     }
@@ -84,7 +84,7 @@ public class CarService {
     }
 
     private Optional<Car> getOptionalCar(long id) {
-        return carRepository.findById(id);
+        return carStore.findById(id);
     }
 
     private Reservation getReservationByDate(String date) throws ParseException {
