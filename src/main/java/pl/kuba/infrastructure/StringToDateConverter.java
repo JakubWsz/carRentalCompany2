@@ -1,4 +1,4 @@
-package pl.kuba.domain;
+package pl.kuba.infrastructure;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

@@ -2,7 +2,7 @@ package pl.kuba.domain;
 
 import org.springframework.stereotype.Service;
 import pl.kuba.entities.Client;
-import pl.kuba.infrastructure.ClientRepository;
+import pl.kuba.infrastructure.persistence.ClientRepository;
 
 import java.util.ArrayList;
 import java.util.List;

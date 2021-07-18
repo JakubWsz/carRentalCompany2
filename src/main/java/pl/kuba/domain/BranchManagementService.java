@@ -3,8 +3,8 @@ package pl.kuba.domain;
 import org.springframework.stereotype.Service;
 import pl.kuba.entities.Branch;
 import pl.kuba.entities.Worker;
-import pl.kuba.infrastructure.BranchRepository;
-import pl.kuba.infrastructure.WorkerRepository;
+import pl.kuba.infrastructure.persistence.BranchRepository;
+import pl.kuba.infrastructure.persistence.WorkerRepository;
 
 import java.util.List;
 import java.util.Optional;
