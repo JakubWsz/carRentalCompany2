@@ -1,16 +1,17 @@
 package pl.kuba.infrastructure;
 
-import java.util.Optional;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import pl.kuba.domain.CarStore;
 import pl.kuba.entities.Car;
 
-@Service
+import java.util.Optional;
+
+@Component
 class DatabaseCarStore implements CarStore {
 
-    private final CarRepository carRepository;
+    private final CarStore carRepository;
 
-    DatabaseCarStore(CarRepository carRepository) {
+    DatabaseCarStore(CarStore carRepository) {
         this.carRepository = carRepository;
     }
 

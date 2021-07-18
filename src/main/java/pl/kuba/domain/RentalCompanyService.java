@@ -3,9 +3,7 @@ package pl.kuba.domain;
 import org.springframework.stereotype.Service;
 import pl.kuba.entities.Branch;
 import pl.kuba.entities.RentalCompany;
-import pl.kuba.infrastructure.BranchStore;
-import pl.kuba.infrastructure.DeletedBranchesRepository;
-import pl.kuba.infrastructure.RentalCompanyRepository;
+import pl.kuba.infrastructure.RentalCompanyStore;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,20 +11,17 @@ import java.util.Optional;
 
 @Service
 public class RentalCompanyService {
-    private final RentalCompanyRepository rentalCompanyRepository;
+    private final RentalCompanyStore rentalCompanyStore;
     private final BranchStore branchStore;
-    private final DeletedBranchesRepository deletedBranchesRepository;
 
-    public RentalCompanyService(RentalCompanyRepository rentalCompanyRepository, BranchStore branchRepository,
-                                DeletedBranchesRepository deletedBranchesRepository) {
-        this.rentalCompanyRepository = rentalCompanyRepository;
+    public RentalCompanyService(RentalCompanyStore rentalCompanyRepository, BranchStore branchRepository) {
+        this.rentalCompanyStore = rentalCompanyRepository;
         this.branchStore = branchRepository;
-        this.deletedBranchesRepository = deletedBranchesRepository;
     }
 
     public RentalCompany configureRentalCompany(String name, String website, String contactAddress, String owner) {
         RentalCompany rentalCompany = new RentalCompany(name, website, contactAddress, owner);
-        return rentalCompanyRepository.save(rentalCompany);
+        return rentalCompanyStore.save(rentalCompany);
     }
 
     public Branch openNewBranch(String address) {
@@ -41,8 +36,8 @@ public class RentalCompanyService {
                 .filter(branch -> branch.getAddress().equals(address))
                 .findFirst();
         if (branchToClose.isPresent()) {
-            deletedBranchesRepository.save(branchToClose.get());
-            branchStore.delete(branchToClose.get());
+            branchToClose.get().setDeleted(true);
+            branchStore.save(branchToClose.get());
         } else {
             throw new RuntimeException("Branch doesn't exist");
         }

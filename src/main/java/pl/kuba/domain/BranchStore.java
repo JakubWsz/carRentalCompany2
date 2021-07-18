@@ -8,6 +8,4 @@ public interface BranchStore {
     List<Branch> findAll();
 
     Branch save(Branch branch);
-
-    void delete(Branch branch);
 }

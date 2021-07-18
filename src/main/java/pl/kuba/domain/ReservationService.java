@@ -2,10 +2,9 @@ package pl.kuba.domain;
 
 import org.springframework.stereotype.Service;
 import pl.kuba.entities.*;
-import pl.kuba.infrastructure.CarRepository;
-import pl.kuba.infrastructure.RentRepository;
-import pl.kuba.infrastructure.ReservationRepository;
-import pl.kuba.infrastructure.ReturnRepository;
+import pl.kuba.infrastructure.CarStore;
+import pl.kuba.infrastructure.RentStore;
+import pl.kuba.infrastructure.ReturnStore;
 
 import java.text.ParseException;
 import java.util.Date;
@@ -13,17 +12,17 @@ import java.util.Optional;
 
 @Service
 public class ReservationService {
-    private final ReservationRepository reservationRepository;
-    private final CarRepository carRepository;
-    private final RentRepository rentRepository;
-    private final ReturnRepository returnRepository;
+    private final ReservationStore reservationStore;
+    private final CarStore carStore;
+    private final RentStore rentStore;
+    private final ReturnStore returnStore;
 
-    public ReservationService(ReservationRepository reservationRepository, CarRepository carRepository,
-                              RentRepository rentRepository, ReturnRepository returnRepository) {
-        this.reservationRepository = reservationRepository;
-        this.carRepository = carRepository;
-        this.rentRepository = rentRepository;
-        this.returnRepository = returnRepository;
+    public ReservationService(ReservationStore reservationRepository, CarStore carRepository,
+                              RentStore rentRepository, ReturnStore returnRepository) {
+        this.reservationStore = reservationRepository;
+        this.carStore = carRepository;
+        this.rentStore = rentRepository;
+        this.returnStore = returnRepository;
     }
 
     public Reservation makeReservation(Client client, Car car, String rentDate, String returnDate,
@@ -39,32 +38,33 @@ public class ReservationService {
         Reservation reservation = new Reservation(getTodayDate(), client, car, rentDateAsDate, returnDateAsDate, rentingBranch,
                 receivingBranch, actualCar.getAmountPerDay());
         Rent rent = rentCreator(rentingWorker, rentDateAsDate, reservation, comment);
-        rentRepository.save(rent);
-        return reservationRepository.save(reservation);
+        rentStore.save(rent);
+        return reservationStore.save(reservation);
     }
 
     public Return confirmCarReceipt(Worker worker, Date returnDate, Reservation reservation,
-                                  int surcharge, String comment) {
+                                    int surcharge, String comment) {
         Return returnVariable = new Return();
         returnVariable.setWorker(worker);
         returnVariable.setReturnDate(returnDate);
         returnVariable.setReservation(reservation);
         returnVariable.setSurcharge(surcharge);
         returnVariable.setComment(comment);
-       return returnRepository.save(returnVariable);
+        return returnStore.save(returnVariable);
     }
 
-    public void cancelReservation(long reservationId) throws ParseException {
+    public void cancelReservation(long reservationId) {
         Optional<Reservation> optionalReservation = findOptionalReservationById(reservationId);
-        Reservation reservation;
         if (optionalReservation.isPresent()) {
-            reservation = optionalReservation.get();
-            reservationRepository.delete(reservation);
-        } else throwExceptionThereIsNoReservationWithPassedId();
+            optionalReservation.get().setDeleted(true);
+            reservationStore.save(optionalReservation.get());
+        } else {
+            throwExceptionThereIsNoReservationWithPassedId();
+        }
     }
 
     private Optional<Reservation> findOptionalReservationById(long reservationId) {
-        return reservationRepository.findAll().stream()
+        return reservationStore.findAll().stream()
                 .filter(reservation -> reservation.getId() == reservationId)
                 .findFirst();
     }
@@ -79,7 +79,7 @@ public class ReservationService {
     }
 
     private Optional<Car> getOptionalCar(Car car) {
-        return carRepository.findAll().stream()
+        return carStore.findAll().stream()
                 .filter(car1 -> car1.getId() == car.getId())
                 .findFirst();
     }

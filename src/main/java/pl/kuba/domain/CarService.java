@@ -5,8 +5,6 @@ import pl.kuba.entities.AvailabilityStatus;
 import pl.kuba.entities.Branch;
 import pl.kuba.entities.Car;
 import pl.kuba.entities.Reservation;
-import pl.kuba.infrastructure.BranchStore;
-import pl.kuba.infrastructure.ReservationRepository;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -19,14 +17,14 @@ import java.util.Optional;
 public class CarService {
     private final CarStore carStore;
     private final BranchStore branchStore;
-    private final ReservationRepository reservationRepository;
+    private final ReservationStore reservationStore;
 
     public CarService(CarStore carStore,
                       BranchStore branchRepository,
-                      ReservationRepository reservationRepository) {
+                      ReservationStore reservationStore) {
         this.carStore = carStore;
         this.branchStore = branchRepository;
-        this.reservationRepository = reservationRepository;
+        this.reservationStore = reservationStore;
     }
 
     public void updateCarMileage(long id, int carMileage) {
@@ -65,7 +63,7 @@ public class CarService {
         if (optionalReservation.isPresent()) {
             availabilityStatus = optionalReservation.get().getCar().getAvailabilityStatus();
             return availabilityStatus;
-        }else throw new RuntimeException("Do konsultacji");
+        }else throw new RuntimeException("There is no such car");
 
     }
 
@@ -110,7 +108,7 @@ public class CarService {
     }
 
     private List<Reservation> getAllReservations() {
-        return reservationRepository.findAll();
+        return reservationStore.findAll();
     }
 
     private Optional<Reservation> getOptionalReservationByDate(String date) throws ParseException {

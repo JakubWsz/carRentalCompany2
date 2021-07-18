@@ -3,8 +3,6 @@ package pl.kuba.domain;
 import org.springframework.stereotype.Service;
 import pl.kuba.entities.Branch;
 import pl.kuba.entities.Worker;
-import pl.kuba.infrastructure.BranchStore;
-import pl.kuba.infrastructure.WorkerRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,11 +10,11 @@ import java.util.Optional;
 @Service
 public class BranchManagementService {
     private final BranchStore branchStore;
-    private final WorkerRepository workerRepository;
+    private final WorkerStore workerStore;
 
-    public BranchManagementService(BranchStore branchRepository, WorkerRepository workerRepository) {
+    public BranchManagementService(BranchStore branchRepository, WorkerStore workerRepository) {
         this.branchStore = branchRepository;
-        this.workerRepository = workerRepository;
+        this.workerStore = workerRepository;
     }
 
     public Worker hireWorker(String firstname, String lastname, boolean manager, Branch branch) {
@@ -29,7 +27,7 @@ public class BranchManagementService {
                     workers.add(worker);
                     branch1.setWorkers(workers);
                 });
-        return workerRepository.save(worker);
+        return workerStore.save(worker);
     }
 
     public void fireWorker(Branch branch, long workerId) {
@@ -44,7 +42,12 @@ public class BranchManagementService {
                     workersAfterFireWorker.remove(worker);
                     targetBranch.setWorkers(workersAfterFireWorker);
                 }));
-        firedWorker.ifPresent(workerRepository::delete);
+        if (firedWorker.isPresent()) {
+            firedWorker.get().setDeleted(true);
+            workerStore.save(firedWorker.get());
+        } else {
+            throw new RuntimeException("Worker doesn't exist");
+        }
     }
 
     private List<Branch> findAllBranches() {
@@ -52,6 +55,6 @@ public class BranchManagementService {
     }
 
     private List<Worker> findAllWorkers() {
-        return workerRepository.findAll();
+        return workerStore.findAll();
     }
 }

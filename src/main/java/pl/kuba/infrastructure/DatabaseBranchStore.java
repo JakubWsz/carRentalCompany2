@@ -1,17 +1,17 @@
 package pl.kuba.infrastructure;
 
+import org.springframework.stereotype.Component;
 import pl.kuba.domain.BranchStore;
 import pl.kuba.entities.Branch;
 
 import java.util.List;
 
+@Component
 public class DatabaseBranchStore implements BranchStore {
     private final BranchStore branchRepository;
-    private final DeletedBranchesRepository deletedBranchesRepository;
 
-    public DatabaseBranchStore(BranchStore branchRepository, DeletedBranchesRepository deletedBranchesRepository) {
+    public DatabaseBranchStore(BranchStore branchRepository) {
         this.branchRepository = branchRepository;
-        this.deletedBranchesRepository = deletedBranchesRepository;
     }
 
     @Override
@@ -22,11 +22,5 @@ public class DatabaseBranchStore implements BranchStore {
     @Override
     public Branch save(Branch branch) {
         return branchRepository.save(new Branch());
-    }
-
-    @Override
-    public void delete(Branch branch) {
-        deletedBranchesRepository.save(new Branch());
-        branchRepository.delete(branch);
     }
 }
