@@ -18,16 +18,14 @@ public class CarService {
     private final CarRepository carRepository;
     private final BranchRepository branchRepository;
     private final ReservationRepository reservationRepository;
-    private final RevenueService revenueService;
     private final CarAvailabilityAsDatesService carAvailabilityAsDatesService;
 
     public CarService(CarRepository carRepository, BranchRepository branchRepository,
-                      ReservationRepository reservationRepository, RevenueService revenueService,
+                      ReservationRepository reservationRepository,
                       CarAvailabilityAsDatesService carAvailabilityAsDatesService) {
         this.carRepository = carRepository;
         this.branchRepository = branchRepository;
         this.reservationRepository = reservationRepository;
-        this.revenueService = revenueService;
         this.carAvailabilityAsDatesService = carAvailabilityAsDatesService;
     }
 
@@ -75,7 +73,7 @@ public class CarService {
         return whenCarIsAvailable;
     }
 
-    public List<Car> getAvailableCars(String branchLocation, String date) throws ParseException {
+    public List<Car> getAvailableCars(String branchLocation, String date) {
         Reservation selectedReservation = getReservationByDate(date);
         return getAllReservations().stream()
                 .filter(reservation -> reservation.getRentDate().equals(selectedReservation.getRentDate()))
@@ -92,7 +90,7 @@ public class CarService {
         return carRepository.findById(id);
     }
 
-    private Reservation getReservationByDate(String date) throws ParseException {
+    private Reservation getReservationByDate(String date) {
         Optional<Reservation> optionalReservation = getOptionalReservationByDate(date);
         Reservation reservation;
         if (optionalReservation.isPresent()) {
@@ -118,7 +116,7 @@ public class CarService {
         return reservationRepository.findAll();
     }
 
-    private Optional<Reservation> getOptionalReservationByDate(String date) throws ParseException {
+    private Optional<Reservation> getOptionalReservationByDate(String date) {
         LocalDate dateToCheck = StringToDateConverter.convertStringToDate(date);
         List<Reservation> reservations = getAllReservations();
         return reservations.stream()

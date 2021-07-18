@@ -16,7 +16,7 @@ class CarServiceTest {
         //given
         TestCarRepository testCarRepository = new TestCarRepository();
         CarService carService = new CarService(testCarRepository, null, null,
-                null, null);
+                null);
         //when
         carService.updateCarMileage(1, 12);
 
@@ -29,7 +29,7 @@ class CarServiceTest {
         //given
         TestCarRepository testCarRepository = new TestCarRepository();
         CarService carService = new CarService(testCarRepository, null, null,
-                null, null);
+                null);
 
         //when
         carService.updateCarAmountPerDay(1L, 145, 99);
@@ -43,7 +43,7 @@ class CarServiceTest {
         //given
         TestCarRepository testCarRepository = new TestCarRepository();
         CarService carService = new CarService(testCarRepository, null, null,
-                null, null);
+                null);
 
         //when
         carService.updateAvailabilityStatus(1L, AvailabilityStatus.AVAILABLE, "");
@@ -57,8 +57,7 @@ class CarServiceTest {
         //given
         TestCarRepository testCarRepository = new TestCarRepository();
         TestCarAvailabilityAsDatesRepository carAvailabilityAsDatesRepository = new TestCarAvailabilityAsDatesRepository();
-        CarService carService = new CarService(testCarRepository, null, null,
-                null, new CarAvailabilityAsDatesService();
+        CarService carService;
 
 
         //when
