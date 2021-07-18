@@ -10,6 +10,7 @@ import pl.kuba.infrastructure.persistence.ReservationRepository;
 import pl.kuba.infrastructure.persistence.ReturnRepository;
 
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Optional;
 
@@ -36,8 +37,8 @@ public class ReservationService {
         if (optionalCar.isPresent())
             actualCar = optionalCar.get();
         else throw new RuntimeException("Selected car doesn't exist");
-        Date rentDateAsDate = StringToDateConverter.convertStringToDate(rentDate);
-        Date returnDateAsDate = StringToDateConverter.convertStringToDate(returnDate);
+        LocalDate rentDateAsDate = StringToDateConverter.convertStringToDate(rentDate);
+        LocalDate returnDateAsDate = StringToDateConverter.convertStringToDate(returnDate);
         Reservation reservation = new Reservation(getTodayDate(), client, car, rentDateAsDate, returnDateAsDate, rentingBranch,
                 receivingBranch, actualCar.getAmountPerDay());
         Rent rent = rentCreator(rentingWorker, rentDateAsDate, reservation, comment);
@@ -45,7 +46,7 @@ public class ReservationService {
         return reservationRepository.save(reservation);
     }
 
-    public Return confirmCarReceipt(Worker worker, Date returnDate, Reservation reservation,
+    public Return confirmCarReceipt(Worker worker, LocalDate returnDate, Reservation reservation,
                                   int surcharge, String comment) {
         Return returnVariable = new Return();
         returnVariable.setWorker(worker);
@@ -75,7 +76,7 @@ public class ReservationService {
         throw new RuntimeException(("There is no reservation with passed id"));
     }
 
-    private Date getTodayDate() throws ParseException {
+    private LocalDate getTodayDate() throws ParseException {
         String todayAsString = DateFormatter.dateFormatter();
         return StringToDateConverter.convertStringToDate(todayAsString);
     }
@@ -86,7 +87,7 @@ public class ReservationService {
                 .findFirst();
     }
 
-    private Rent rentCreator(Worker worker, Date rentDate, Reservation reservation, String comment) {
+    private Rent rentCreator(Worker worker, LocalDate rentDate, Reservation reservation, String comment) {
         Rent rent = new Rent();
         rent.setWorker(worker);
         rent.setReservation(reservation);
