@@ -3,8 +3,7 @@ package pl.kuba.domain;
 import org.springframework.stereotype.Service;
 import pl.kuba.entities.Car;
 import pl.kuba.entities.Revenue;
-import pl.kuba.infrastructure.CarRepository;
-import pl.kuba.infrastructure.RevenueRepository;
+import pl.kuba.infrastructure.persistence.CarRepository;
 import pl.kuba.infrastructure.persistence.RevenueRepository;
 
 import java.math.BigDecimal;

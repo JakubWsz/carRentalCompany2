@@ -24,13 +24,13 @@ public class CarService {
     public CarService(CarRepository carRepository, BranchRepository branchRepository,
                       ReservationRepository reservationRepository, RevenueService revenueService,
                       CarAvailabilityAsDatesService carAvailabilityAsDatesService) {
-                      ReservationRepository reservationRepository) {
         this.carRepository = carRepository;
         this.branchRepository = branchRepository;
         this.reservationRepository = reservationRepository;
         this.revenueService = revenueService;
         this.carAvailabilityAsDatesService = carAvailabilityAsDatesService;
     }
+
 
     public void updateCarMileage(long id, int carMileage) {
         Optional<Car> optionalCar = getOptionalCar(id);
@@ -58,10 +58,9 @@ public class CarService {
         return carNote.toString();
     }
 
-    public Map<LocalDate,AvailabilityStatus> getCarAvailabilityStatusByParticularDate(long id, String date)
-            throws ParseException {
+    public Map<LocalDate,AvailabilityStatus> getCarAvailabilityStatusByParticularDate(long id, String date) {
         Map<LocalDate,AvailabilityStatus> whenCarIsAvailable = new HashMap<>();
-        Date particularDate = StringToDateConverter.convertStringToDate(date);
+        LocalDate particularDate = StringToDateConverter.convertStringToDate(date);
 
         CarAvailabilityAsDates dates = carAvailabilityAsDatesService.getDatesRangeCarsPotentialAvailability(id);
 
@@ -83,16 +82,6 @@ public class CarService {
                 .filter(reservation -> reservation.getRentingBranch().equals(getSelectedBranch(branchLocation)))
                 .map(Reservation::getCar)
                 .collect(Collectors.toList());
-    }
-
-    public Car buyCar(Car car, BigDecimal price) {
-        revenueService.invest(price);
-        return carRepository.save(car);
-    }
-
-    public void sellCar(Car car, BigDecimal price) {
-        revenueService.addPayment(price);
-        carRepository.delete(car);
     }
 
     private void throwExceptionThereIsNoCarWithPassedId() {
@@ -130,7 +119,7 @@ public class CarService {
     }
 
     private Optional<Reservation> getOptionalReservationByDate(String date) throws ParseException {
-        Date dateToCheck = StringToDateConverter.convertStringToDate(date);
+        LocalDate dateToCheck = StringToDateConverter.convertStringToDate(date);
         List<Reservation> reservations = getAllReservations();
         return reservations.stream()
                 .filter(reservation -> reservation.getReservationDate().equals(dateToCheck))
