@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 import pl.kuba.entities.Branch;
 
 @Repository
-public interface BranchRepository extends JpaRepository<Branch, Integer> {
+public interface BranchRepository extends JpaRepository<Branch, Long> {
 
 }

@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class CarService {
@@ -56,38 +57,31 @@ public class CarService {
         return carNote.toString();
     }
 
-    public HashMap<LocalDate,AvailabilityStatus> getCarAvailabilityStatusByParticularDate(long id, String date)
+    public Map<LocalDate,AvailabilityStatus> getCarAvailabilityStatusByParticularDate(long id, String date)
             throws ParseException {
-        AvailabilityStatus availabilityStatus = null;
-        HashMap<LocalDate,AvailabilityStatus> whenCarIsAvailable = null;
+        Map<LocalDate,AvailabilityStatus> whenCarIsAvailable = new HashMap<>();
         Date particularDate = StringToDateConverter.convertStringToDate(date);
 
         CarAvailabilityAsDates dates = carAvailabilityAsDatesService.getDatesRangeCarsPotentialAvailability(id);
 
-        for (LocalDate date1 = dates.getRentDate(); date1.isAfter(dates.getReturnDate()); date1 = date1.plusDays(1)) {
-            Optional<Reservation> optionalReservation = getAllReservations().stream()
+        for (LocalDate dateRange = dates.getRentDate(); dateRange.isAfter(dates.getReturnDate()); dateRange = dateRange.plusDays(1)) {
+            LocalDate finalDateRange = dateRange;
+            getAllReservations().stream()
                     .filter(reservation -> reservation.getReservationDate().equals(particularDate))
                     .filter(reservation -> reservation.getCar().getId() == id)
-                    .findFirst();
-            if (optionalReservation.ifPresent(
-                    reservation -> reservation.getCar()
-                            .setAvailabilityStatus(availabilityStatus = optionalReservation.get()
-                                    .getCar().getAvailabilityStatus()))) {
-                availabilityStatus = optionalReservation.get().getCar().getAvailabilityStatus();
-            }
-            whenCarIsAvailable.put(date1,availabilityStatus);
+                    .findFirst()
+                    .ifPresent(reservation -> whenCarIsAvailable.put(finalDateRange, reservation.getCar().getAvailabilityStatus()));
         }
         return whenCarIsAvailable;
     }
 
     public List<Car> getAvailableCars(String branchLocation, String date) throws ParseException {
         Reservation selectedReservation = getReservationByDate(date);
-        List<Car> cars = new ArrayList<>();
-        getAllReservations().stream()
+        return getAllReservations().stream()
                 .filter(reservation -> reservation.getRentDate().equals(selectedReservation.getRentDate()))
                 .filter(reservation -> reservation.getRentingBranch().equals(getSelectedBranch(branchLocation)))
-                .forEach(reservation -> cars.add(reservation.getCar()));
-        return cars;
+                .map(Reservation::getCar)
+                .collect(Collectors.toList());
     }
 
     public Car buyCar(Car car, BigDecimal price) {

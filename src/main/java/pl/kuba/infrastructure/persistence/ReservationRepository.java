@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 import pl.kuba.entities.Reservation;
 
 @Repository
-public interface ReservationRepository extends JpaRepository<Reservation ,Integer> {
+public interface ReservationRepository extends JpaRepository<Reservation ,Long> {
 
 }
