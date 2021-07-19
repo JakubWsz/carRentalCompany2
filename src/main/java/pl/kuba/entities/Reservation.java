@@ -12,7 +12,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Entity
 public class Reservation extends BaseEntity {
-    private Date reservationDate;
+    private LocalDate reservationDate;
     @OneToOne
     private Client client;
     @OneToOne

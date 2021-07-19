@@ -1,12 +1,12 @@
 package pl.kuba.infrastructure.datehelpers;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class StringToDateConverter {
 
-    public static Date convertStringToDate(String stringDate) throws ParseException {
-        return new SimpleDateFormat("dd/MM/yyyy").parse(stringDate);
+    public static LocalDate convertStringToDate(String stringDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        return LocalDate.parse(stringDate, formatter);
     }
 }

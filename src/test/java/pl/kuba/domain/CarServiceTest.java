@@ -2,11 +2,14 @@ package pl.kuba.domain;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import pl.kuba.domain.servises.CarAvailabilityAsDatesService;
 import pl.kuba.domain.servises.CarService;
+import pl.kuba.domain.stores.CarAvailabilityAsDatesStore;
 import pl.kuba.domain.stores.CarStore;
 import pl.kuba.entities.AvailabilityStatus;
 import pl.kuba.entities.BodyType;
 import pl.kuba.entities.Car;
+import pl.kuba.entities.CarAvailabilityAsDates;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -20,11 +23,13 @@ class CarServiceTest {
     public void updateCarMileageShouldChangeMileageValue() {
         //given
         TestCarStore testCarStore = new TestCarStore();
+        TestCarAvailabilityAsDates testCarAvailabilityAsDates = new TestCarAvailabilityAsDates();
         Car car = new Car("Mercedes", "benc", BodyType.CONVERTIBLE, 1999, "black",
                 10000, AvailabilityStatus.AVAILABLE, BigDecimal.valueOf(120L));
         System.out.println(car.getId());
         testCarStore.save(car);
-        CarService carService = new CarService(new TestCarStore(), null, null);
+        CarAvailabilityAsDatesService carAvailabilityAsDatesService = new CarAvailabilityAsDatesService()
+        CarService carService = new CarService(testCarStore,);
 
         //when
         carService.updateCarMileage(0L, 12);
@@ -40,7 +45,7 @@ class CarServiceTest {
         Car car = new Car("Mercedes", "benc", BodyType.CONVERTIBLE, 1999, "black",
                 10000, AvailabilityStatus.AVAILABLE, BigDecimal.valueOf(120L));
         testCarStore.save(car);
-        CarService carService = new CarService(new TestCarStore(), null, null);
+        CarService carService = new CarService(carAvailabilityAsDatesService, new TestCarStore(), null, null, reservationsFeeder);
 
         //when
         carService.updateCarAmountPerDay(car.getId(), 145, 99);
@@ -56,7 +61,7 @@ class CarServiceTest {
         Car car = new Car("Mercedes", "benc", BodyType.CONVERTIBLE, 1999, "black",
                 10000, AvailabilityStatus.AVAILABLE, BigDecimal.valueOf(120L));
         testCarStore.save(car);
-        CarService carService = new CarService(new TestCarStore(), null, null);
+        CarService carService = new CarService(carAvailabilityAsDatesService, new TestCarStore(), null, null, reservationsFeeder);
         //when
         carService.updateAvailabilityStatus(car.getId(), AvailabilityStatus.AVAILABLE, "");
 
@@ -83,5 +88,15 @@ class TestCarStore implements CarStore {
     @Override
     public List<Car> findAll() {
         return new ArrayList<>(carList);
+    }
+}
+
+class TestCarAvailabilityAsDates implements CarAvailabilityAsDatesStore {
+   private List<CarAvailabilityAsDates> carAvailabilityAsDatesList;
+
+    @Override
+    public CarAvailabilityAsDates save(CarAvailabilityAsDates carAvailabilityAsDates) {
+         carAvailabilityAsDatesList.add(carAvailabilityAsDates);
+         return carAvailabilityAsDates;
     }
 }

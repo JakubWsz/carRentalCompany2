@@ -5,6 +5,8 @@ import pl.kuba.domain.stores.ReturnStore;
 import pl.kuba.entities.Return;
 import pl.kuba.infrastructure.persistence.ReturnRepository;
 
+import java.util.List;
+
 @Component
 public class DatabaseReturnStore implements ReturnStore {
    private final ReturnRepository returnRepository;
@@ -16,5 +18,10 @@ public class DatabaseReturnStore implements ReturnStore {
     @Override
     public Return save(Return aReturn) {
         return returnRepository.save(aReturn);
+    }
+
+    @Override
+    public List<Return> findAll() {
+        return returnRepository.findAll();
     }
 }
