@@ -1,9 +1,9 @@
-package pl.kuba.api;
+package pl.kuba.api.apies;
 
 import org.springframework.web.bind.annotation.*;
 import pl.kuba.api.request.reservation.ConfirmCarReceiptRequest;
 import pl.kuba.api.request.reservation.MakeReservationRequest;
-import pl.kuba.domain.ReservationService;
+import pl.kuba.domain.servises.ReservationService;
 import pl.kuba.entities.Reservation;
 import pl.kuba.entities.Return;
 

@@ -1,8 +1,8 @@
-package pl.kuba.api;
+package pl.kuba.api.apies;
 
 import org.springframework.web.bind.annotation.*;
 import pl.kuba.api.request.car.*;
-import pl.kuba.domain.CarService;
+import pl.kuba.domain.servises.CarService;
 import pl.kuba.entities.AvailabilityStatus;
 import pl.kuba.entities.Car;
 
@@ -15,22 +15,6 @@ public class CarAPI {
 
     public CarAPI(CarService carService) {
         this.carService = carService;
-    }
-
-    @PostMapping("/buy")
-    public Car buyCar(@RequestBody CarBuySellRequest carBuyRequest) {
-        return carService.buyCar(
-                carBuyRequest.getCar(),
-                carBuyRequest.getPrice()
-        );
-    }
-
-    @DeleteMapping("/sell")
-    public void sellCar(@RequestParam CarBuySellRequest carBuyRequest) {
-        carService.sellCar(
-                carBuyRequest.getCar(),
-                carBuyRequest.getPrice()
-        );
     }
 
     @GetMapping("available")

@@ -1,7 +1,10 @@
-package pl.kuba.domain;
+package pl.kuba.domain.servises;
 
 import org.springframework.stereotype.Service;
+import pl.kuba.domain.stores.CarStore;
+import pl.kuba.entities.Car;
 import pl.kuba.entities.Revenue;
+import pl.kuba.infrastructure.CarStore;
 import pl.kuba.infrastructure.persistence.RevenueRepository;
 
 import java.math.BigDecimal;
@@ -10,34 +13,38 @@ import java.util.stream.Collectors;
 
 @Service
 public class RevenueService {
-    private final RevenueRepository revenueRepository;
+    private final RevenueRepository revenueStore;
+    private final CarStore carStore;
 
-    public RevenueService(RevenueRepository revenueRepository) {
-        this.revenueRepository = revenueRepository;
+    public RevenueService(RevenueRepository revenueRepository, CarStore carRepository) {
+        this.revenueStore = revenueRepository;
+        this.carStore = carRepository;
     }
 
-    public Revenue invest(BigDecimal price) {
+    public Revenue invest(Car car, BigDecimal price) {
         Revenue revenue = new Revenue();
         revenue.setAnnualInvestments(price);
-        return revenueRepository.save(revenue);
+        carStore.save(car);
+        return revenueStore.save(revenue);
     }
 
-    public Revenue addPayment(BigDecimal payment) {
+    public Revenue addPayment(Car car, BigDecimal payment) {
         Revenue revenue = new Revenue();
         revenue.setAnnualIncome(payment);
-        return revenueRepository.save(revenue);
+        carStore.delete(car);
+        return revenueStore.save(revenue);
     }
 
     public BigDecimal countTotalIncome() {
         BigDecimal investmentAmount = BigDecimal.ZERO;
-        List<Revenue> investmentsList = revenueRepository.findAll().stream()
+        List<Revenue> investmentsList = revenueStore.findAll().stream()
                 .filter(revenue -> !revenue.getAnnualInvestments().equals(BigDecimal.ZERO))
                 .collect(Collectors.toUnmodifiableList());
         for (Revenue investment : investmentsList) {
             investmentAmount.add(investment.getAnnualInvestments());
         }
         BigDecimal incomesAmount = BigDecimal.ZERO;
-        List<Revenue> incomesList = revenueRepository.findAll().stream()
+        List<Revenue> incomesList = revenueStore.findAll().stream()
                 .filter(revenue -> !revenue.getAnnualIncome().equals(BigDecimal.ZERO))
                 .collect(Collectors.toUnmodifiableList());
         for (Revenue income : incomesList) {

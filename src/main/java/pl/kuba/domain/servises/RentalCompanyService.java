@@ -1,49 +1,44 @@
-package pl.kuba.domain;
+package pl.kuba.domain.servises;
 
 import org.springframework.stereotype.Service;
-import pl.kuba.api.request.rentalcompany.RentalCompanyUpdateRequest;
+import pl.kuba.domain.stores.BranchStore;
 import pl.kuba.entities.Branch;
 import pl.kuba.entities.RentalCompany;
-import pl.kuba.infrastructure.persistence.BranchRepository;
-import pl.kuba.infrastructure.persistence.ClosedBranchRepository;
 import pl.kuba.infrastructure.persistence.RentalCompanyRepository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Service
 public class RentalCompanyService {
-    private final RentalCompanyRepository rentalCompanyRepository;
-    private final BranchRepository branchRepository;
-    private final ClosedBranchRepository closedBranchRepository;
+    private final RentalCompanyRepository rentalCompanyStore;
+    private final BranchStore branchStore;
 
-    public RentalCompanyService(RentalCompanyRepository rentalCompanyRepository, BranchRepository branchRepository,
-                                ClosedBranchRepository closedBranchRepository) {
-        this.rentalCompanyRepository = rentalCompanyRepository;
-        this.branchRepository = branchRepository;
-        this.closedBranchRepository = closedBranchRepository;
+    public RentalCompanyService(RentalCompanyRepository rentalCompanyRepository, BranchStore branchRepository) {
+        this.rentalCompanyStore = rentalCompanyRepository;
+        this.branchStore = branchRepository;
     }
 
     public RentalCompany configureRentalCompany(String name, String website, String contactAddress, String owner) {
         RentalCompany rentalCompany = new RentalCompany(name, website, contactAddress, owner);
-        validateRentalCompanyData(name, website, contactAddress, owner);
-        return rentalCompanyRepository.save(rentalCompany);
+        return rentalCompanyStore.save(rentalCompany);
     }
 
     public Branch openNewBranch(String address) {
         Branch branch = new Branch(address);
         branch.setModificationDate(LocalDateTime.now());
-        return branchRepository.save(branch);
+        return branchStore.save(branch);
     }
 
-    public String closeBranch(String address) {
-        Optional<Branch> branchToClose = closedBranchRepository.findByAddress(address);
-
+    public void closeBranch(String address) {
+        List<Branch> branches = branchStore.findAll();
+        Optional<Branch> branchToClose = branches.stream()
+                .filter(branch -> branch.getAddress().equals(address))
+                .findFirst();
         if (branchToClose.isPresent()) {
-            closedBranchRepository.save(branchToClose.get());
-            return "Branch is closed";
+            branchToClose.get().setDeleted(true);
+            branchStore.save(branchToClose.get());
         } else {
             throw new RuntimeException("Branch doesn't exist");
 

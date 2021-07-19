@@ -1,22 +1,22 @@
-package pl.kuba.domain;
+package pl.kuba.domain.servises;
 
 import org.springframework.stereotype.Service;
+import pl.kuba.domain.stores.BranchStore;
+import pl.kuba.domain.stores.WorkerStore;
 import pl.kuba.entities.Branch;
 import pl.kuba.entities.Worker;
-import pl.kuba.infrastructure.persistence.BranchRepository;
-import pl.kuba.infrastructure.persistence.WorkerRepository;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class BranchManagementService {
-    private final BranchRepository branchRepository;
-    private final WorkerRepository workerRepository;
+    private final BranchStore branchStore;
+    private final WorkerStore workerStore;
 
-    public BranchManagementService(BranchRepository branchRepository, WorkerRepository workerRepository) {
-        this.branchRepository = branchRepository;
-        this.workerRepository = workerRepository;
+    public BranchManagementService(BranchStore branchRepository, WorkerStore workerRepository) {
+        this.branchStore = branchRepository;
+        this.workerStore = workerRepository;
     }
 
     public Worker hireWorker(String firstname, String lastname, boolean manager, Branch branch) {
@@ -29,7 +29,7 @@ public class BranchManagementService {
                     workers.add(worker);
                     branch1.setWorkers(workers);
                 });
-        return workerRepository.save(worker);
+        return workerStore.save(worker);
     }
 
     public void fireWorker(Branch branch, long workerId) {
@@ -44,14 +44,19 @@ public class BranchManagementService {
                     workersAfterFireWorker.remove(worker);
                     targetBranch.setWorkers(workersAfterFireWorker);
                 }));
-        firedWorker.ifPresent(workerRepository::delete);
+        if (firedWorker.isPresent()) {
+            firedWorker.get().setDeleted(true);
+            workerStore.save(firedWorker.get());
+        } else {
+            throw new RuntimeException("Worker doesn't exist");
+        }
     }
 
     private List<Branch> findAllBranches() {
-        return branchRepository.findAll();
+        return branchStore.findAll();
     }
 
     private List<Worker> findAllWorkers() {
-        return workerRepository.findAll();
+        return workerStore.findAll();
     }
 }
