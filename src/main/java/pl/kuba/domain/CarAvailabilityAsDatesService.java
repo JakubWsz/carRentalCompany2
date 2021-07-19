@@ -1,7 +1,6 @@
 package pl.kuba.domain;
 
 import org.springframework.stereotype.Service;
-import pl.kuba.entities.Car;
 import pl.kuba.entities.CarAvailabilityAsDates;
 import pl.kuba.entities.Rent;
 import pl.kuba.entities.Return;
@@ -10,8 +9,6 @@ import pl.kuba.infrastructure.persistence.RentRepository;
 import pl.kuba.infrastructure.persistence.ReturnRepository;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Optional;
 
 @Service
