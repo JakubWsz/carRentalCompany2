@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Optional;
 
 class CarServiceTest {
-    "później"
     @Test
     public void updateCarMileageShouldChangeMileageValue() {
         //given
