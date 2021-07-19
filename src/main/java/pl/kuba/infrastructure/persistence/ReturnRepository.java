@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import pl.kuba.entities.Return;
 
 @Repository
-public interface ReturnRepository extends JpaRepository<Return, Integer> {
+public interface ReturnRepository extends JpaRepository<Return, Long> {
 }

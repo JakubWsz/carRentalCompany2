@@ -8,17 +8,17 @@ import pl.kuba.entities.AvailabilityStatus;
 import pl.kuba.entities.Branch;
 import pl.kuba.entities.Car;
 import pl.kuba.entities.Reservation;
-import pl.kuba.infrastructure.datehelpers.StringToDateConverter;
+import pl.kuba.infrastructure.StringToDateConverter;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class CarService {
+    private final CarAvailabilityAsDatesService carAvailabilityAsDatesService;
     private final CarStore carStore;
     private final BranchStore branchStore;
     private final ReservationStore reservationStore;
@@ -40,7 +40,7 @@ public class CarService {
 
     public void updateCarAmountPerDay(long id, int carAmountPerDayGoldCoin, int carAmountPerDayPennyCoin) {
         BigDecimal carAmountPerDay =
-                new BigDecimal(String.format("%d.%d",carAmountPerDayGoldCoin,carAmountPerDayPennyCoin));
+                new BigDecimal(String.format("%d.%d", carAmountPerDayGoldCoin, carAmountPerDayPennyCoin));
         Optional<Car> optionalCar = getOptionalCar(id);
         if (optionalCar.isPresent()) {
             optionalCar.get().setAmountPerDay(carAmountPerDay);
@@ -57,28 +57,41 @@ public class CarService {
         return carNote.toString();
     }
 
-    public AvailabilityStatus getCarAvailabilityStatusByParticularDate(long carId, String date) throws ParseException {
-        AvailabilityStatus availabilityStatus;
+    public Map<LocalDate,AvailabilityStatus> getCarAvailabilityStatusByParticularDate(long id, String date)
+            throws ParseException {
+        Map<LocalDate,AvailabilityStatus> whenCarIsAvailable = new HashMap<>();
         Date particularDate = StringToDateConverter.convertStringToDate(date);
-        Optional<Reservation> optionalReservation = getAllReservations().stream()
-                .filter(reservation -> reservation.getReservationDate().equals(particularDate))
-                .filter(reservation -> reservation.getCar().getId() == carId)
-                .findFirst();
-        if (optionalReservation.isPresent()) {
-            availabilityStatus = optionalReservation.get().getCar().getAvailabilityStatus();
-            return availabilityStatus;
-        }else throw new RuntimeException("There is no such car");
 
+        CarAvailabilityAsDates dates = carAvailabilityAsDatesService.getDatesRangeCarsPotentialAvailability(id);
+
+        for (LocalDate dateRange = dates.getRentDate(); dateRange.isAfter(dates.getReturnDate()); dateRange = dateRange.plusDays(1)) {
+            LocalDate finalDateRange = dateRange;
+            getAllReservations().stream()
+                    .filter(reservation -> reservation.getReservationDate().equals(particularDate))
+                    .filter(reservation -> reservation.getCar().getId() == id)
+                    .findFirst()
+                    .ifPresent(reservation -> whenCarIsAvailable.put(finalDateRange, reservation.getCar().getAvailabilityStatus()));
+        }
+        return whenCarIsAvailable;
     }
 
     public List<Car> getAvailableCars(String branchLocation, String date) throws ParseException {
         Reservation selectedReservation = getReservationByDate(date);
-        List<Car> cars = new ArrayList<>();
-        getAllReservations().stream()
+        return getAllReservations().stream()
                 .filter(reservation -> reservation.getRentDate().equals(selectedReservation.getRentDate()))
                 .filter(reservation -> reservation.getRentingBranch().equals(getSelectedBranch(branchLocation)))
-                .forEach(reservation -> cars.add(reservation.getCar()));
-        return cars;
+                .map(Reservation::getCar)
+                .collect(Collectors.toList());
+    }
+
+    public Car buyCar(Car car, BigDecimal price) {
+        revenueService.invest(price);
+        return carRepository.save(car);
+    }
+
+    public void sellCar(Car car, BigDecimal price) {
+        revenueService.addPayment(price);
+        carRepository.delete(car);
     }
 
     private void throwExceptionThereIsNoCarWithPassedId() {

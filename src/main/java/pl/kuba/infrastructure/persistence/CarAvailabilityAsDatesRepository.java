@@ -2,11 +2,8 @@ package pl.kuba.infrastructure.persistence;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import pl.kuba.entities.Client;
-
-import java.util.List;
+import pl.kuba.entities.CarAvailabilityAsDates;
 
 @Repository
-public interface ClientRepository extends JpaRepository<Client,Long> {
-    List<Client> findByEmail(String email);
+public interface CarAvailabilityAsDatesRepository extends JpaRepository<CarAvailabilityAsDates, Long> {
 }

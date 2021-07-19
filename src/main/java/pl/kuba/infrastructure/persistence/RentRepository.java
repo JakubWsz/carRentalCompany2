@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import pl.kuba.entities.Rent;
 
 @Repository
-public interface RentRepository extends JpaRepository<Rent,Integer> {
+public interface RentRepository extends JpaRepository<Rent,Long> {
 }
