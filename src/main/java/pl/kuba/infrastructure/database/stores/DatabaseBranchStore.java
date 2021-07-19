@@ -6,6 +6,7 @@ import pl.kuba.entities.Branch;
 import pl.kuba.infrastructure.persistence.BranchRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class DatabaseBranchStore implements BranchStore {
@@ -23,5 +24,10 @@ public class DatabaseBranchStore implements BranchStore {
     @Override
     public Branch save(Branch branch) {
         return branchRepository.save(new Branch());
+    }
+
+    @Override
+    public Optional<Branch> findByAddress(String contactAddress) {
+        return branchRepository.findByAddress(contactAddress);
     }
 }

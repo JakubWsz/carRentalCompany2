@@ -1,53 +1,32 @@
 package pl.kuba.domain;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import pl.kuba.api.request.rentalcompany.RentalCompanyUpdateRequest;
+import pl.kuba.domain.servises.RentalCompanyService;
+import pl.kuba.domain.stores.BranchStore;
+import pl.kuba.domain.stores.RentalCompanyStore;
 import pl.kuba.entities.Branch;
 import pl.kuba.entities.RentalCompany;
-import pl.kuba.infrastructure.persistence.BranchRepository;
-import pl.kuba.infrastructure.persistence.ClosedBranchRepository;
-import pl.kuba.infrastructure.persistence.RentalCompanyRepository;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.when;
 
 class RentalCompanyServiceTests {
-    @InjectMocks
-    private RentalCompanyService rentalCompanyService;
-    @Mock
-    private RentalCompanyRepository rentalCompanyRepository;
-    @Mock
-    private BranchRepository branchRepository;
-    @Mock
-    private ClosedBranchRepository closedBranchRepository;
-
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-        Mockito.reset(rentalCompanyRepository);
-        Mockito.reset(branchRepository);
-        rentalCompanyService = Mockito.spy(new RentalCompanyService(rentalCompanyRepository, branchRepository, closedBranchRepository));
-    }
 
     @Test
     void configureRentalCompanyDataShouldBeNotNull() {
         //given
+        TestRentalCompanyStore testRentalCompanyStore = new TestRentalCompanyStore();
+        RentalCompanyService rentalCompanyService = new RentalCompanyService(testRentalCompanyStore, null);
         String name = "x";
         String website = "https://www.something.com";
         String contactAddress = "123 xd";
         String owner = "asd asd";
         RentalCompany rentalCompany = new RentalCompany(name, website, contactAddress, owner);
-        when(rentalCompanyRepository.save(rentalCompany)).thenReturn(rentalCompany);
-
+        testRentalCompanyStore.save(rentalCompany);
         //when
         RentalCompany rentalCompany1 = rentalCompanyService.configureRentalCompany(name, website, contactAddress, owner);
 
@@ -62,18 +41,18 @@ class RentalCompanyServiceTests {
     @Test
     void configureRentalCompanyWithNullNameShouldThrowException() {
         //given
-        String name = null;
+        TestRentalCompanyStore testRentalCompanyStore = new TestRentalCompanyStore();
+        RentalCompanyService rentalCompanyService = new RentalCompanyService(testRentalCompanyStore, null);
+        String name = "company";
         String website = "https://www.something.com";
         String contactAddress = "123 xd";
         String owner = "asd asd";
         RentalCompany rentalCompany = new RentalCompany(name, website, contactAddress, owner);
-        when(rentalCompanyRepository.save(rentalCompany)).thenReturn(rentalCompany);
-
+        testRentalCompanyStore.save(rentalCompany);
         //when
         RuntimeException runtimeException = assertThrows(
                 RuntimeException.class,
-                () -> rentalCompanyService.configureRentalCompany(name, website, contactAddress, owner));
-
+                () -> rentalCompanyService.configureRentalCompany(null, website, contactAddress, owner));
         //then
         Assertions.assertEquals("Name is null", runtimeException.getMessage());
     }
@@ -81,18 +60,18 @@ class RentalCompanyServiceTests {
     @Test
     void configureRentalCompanyWithNullWebsiteShouldThrowException() {
         //given
+        TestRentalCompanyStore testRentalCompanyStore = new TestRentalCompanyStore();
+        RentalCompanyService rentalCompanyService = new RentalCompanyService(testRentalCompanyStore, null);
         String name = "x";
-        String website = "wrong address";
+        String website = null;
         String contactAddress = "123 xd";
         String owner = "asd asd";
         RentalCompany rentalCompany = new RentalCompany(name, website, contactAddress, owner);
-        when(rentalCompanyRepository.save(rentalCompany)).thenReturn(rentalCompany);
-
+        testRentalCompanyStore.save(rentalCompany);
         //when
         RuntimeException runtimeException = assertThrows(
                 RuntimeException.class,
                 () -> rentalCompanyService.configureRentalCompany(name, website, contactAddress, owner));
-
         //then
         Assertions.assertEquals("URL is invalid", runtimeException.getMessage());
     }
@@ -100,13 +79,14 @@ class RentalCompanyServiceTests {
     @Test
     void configureRentalCompanyWithNullContactAddressShouldThrowException() {
         //given
+        TestRentalCompanyStore testRentalCompanyStore = new TestRentalCompanyStore();
+        RentalCompanyService rentalCompanyService = new RentalCompanyService(testRentalCompanyStore, null);
         String name = "x";
         String website = "https://www.something.com";
         String contactAddress = null;
         String owner = "asd asd";
         RentalCompany rentalCompany = new RentalCompany(name, website, contactAddress, owner);
-        when(rentalCompanyRepository.save(rentalCompany)).thenReturn(rentalCompany);
-
+        testRentalCompanyStore.save(rentalCompany);
         //when
         RuntimeException runtimeException = assertThrows(
                 RuntimeException.class,
@@ -119,13 +99,14 @@ class RentalCompanyServiceTests {
     @Test
     void configureRentalCompanyWithNullOwnerShouldThrowException() {
         //given
+        TestRentalCompanyStore testRentalCompanyStore = new TestRentalCompanyStore();
+        RentalCompanyService rentalCompanyService = new RentalCompanyService(testRentalCompanyStore, null);
         String name = "x";
         String website = "https://www.something.com";
         String contactAddress = "123 xd";
         String owner = null;
         RentalCompany rentalCompany = new RentalCompany(name, website, contactAddress, owner);
-        when(rentalCompanyRepository.save(rentalCompany)).thenReturn(rentalCompany);
-
+        testRentalCompanyStore.save(rentalCompany);
         //when
         RuntimeException runtimeException = assertThrows(
                 RuntimeException.class,
@@ -138,24 +119,26 @@ class RentalCompanyServiceTests {
     @Test
     void updateRentalCompanyShouldBeNotNullAndHaveDifferentValuesThanConfigureBranch() {
         //given
+        TestRentalCompanyStore testRentalCompanyStore = new TestRentalCompanyStore();
+        RentalCompanyService rentalCompanyService = new RentalCompanyService(testRentalCompanyStore, null);
         String name = "x";
         String website = "https://www.something.com";
         String contactAddress = "123 xd";
         String owner = "asd asd";
+        RentalCompany rentalCompany = new RentalCompany(name, website, contactAddress, owner);
+        testRentalCompanyStore.save(rentalCompany);
+
         String newWebsiteName = "https://www.somethingNew.com";
         String newContactAddress = "321 dx";
         String newOwner = "qwe qwe";
         String newName = "y";
-        RentalCompany rentalCompany = new RentalCompany(name, website, contactAddress, owner);
-        when(rentalCompanyRepository.save(rentalCompany)).thenReturn(rentalCompany);
-        when(rentalCompanyRepository.findByName(rentalCompany.getName())).thenReturn(Optional.of(rentalCompany));
-
-
+        RentalCompany rentalCompany1 = new RentalCompany(newOwner, newWebsiteName, newContactAddress, newOwner);
+        testRentalCompanyStore.save(rentalCompany1);
 
         //when
-        RentalCompany rentalCompany1 =
-                rentalCompanyService.updateRentalCompany(new RentalCompanyUpdateRequest(rentalCompany.getName(),
-                        newWebsiteName, newContactAddress, newOwner, newName));
+        rentalCompanyService.updateRentalCompany(rentalCompany.getName(), rentalCompany1.getName(),
+                rentalCompany1.getWebsite(), rentalCompany1.getContactAddress(),
+                rentalCompany1.getOwner());
 
         //then
         Assertions.assertNotNull(rentalCompany1);
@@ -168,9 +151,12 @@ class RentalCompanyServiceTests {
     @Test
     void openNewBranchShouldBeNotNull() {
         //given
-        String contactAddress = "contactAddress";
+        TestBranchStore testBranchStore = new TestBranchStore();
+        RentalCompanyService rentalCompanyService = new RentalCompanyService(null,
+                testBranchStore);
+        String contactAddress = null;
         Branch branch = new Branch(contactAddress);
-        when(branchRepository.save(any(Branch.class))).thenReturn(branch);
+        testBranchStore.save(branch);
 
         //when
         Branch branch1 = (rentalCompanyService.openNewBranch(contactAddress));
@@ -182,18 +168,56 @@ class RentalCompanyServiceTests {
     @Test
     void closeBranchShouldReturnBranchIsClosed() {
         //given
-        String contactAddress = "contactAddress";
+        TestBranchStore testBranchStore = new TestBranchStore();
+        RentalCompanyService rentalCompanyService = new RentalCompanyService(null,
+                testBranchStore);
+        String contactAddress = "Szkolna 17";
         Branch branch = new Branch(contactAddress);
-        when(branchRepository.save(any(Branch.class))).thenReturn(branch);
-        Branch branch1 = (rentalCompanyService.openNewBranch(contactAddress));
-        Optional<Branch> optionalBranch;
-        optionalBranch = Optional.of(branch1);
-        when(closedBranchRepository.findByAddress(contactAddress)).thenReturn(optionalBranch);
+        testBranchStore.save(branch);
 
         //when
-        String isClosed = (rentalCompanyService.closeBranch(branch1.getAddress()));
+        boolean isClosed = (rentalCompanyService.closeBranch(branch.getAddress()));
 
         //then
-        Assertions.assertEquals("Branch is closed", isClosed);
+        Assertions.assertTrue(isClosed);
+    }
+}
+
+class TestRentalCompanyStore implements RentalCompanyStore {
+    private final List<RentalCompany> rentalCompanies = new ArrayList<>();
+
+    @Override
+    public Optional<RentalCompany> findByName(String name) {
+        return rentalCompanies.stream()
+                .filter(rentalCompany -> rentalCompany.equals(name))
+                .findFirst();
+    }
+
+    @Override
+    public RentalCompany save(RentalCompany rentalCompany) {
+        rentalCompanies.add(rentalCompany);
+        return rentalCompany;
+    }
+}
+
+class TestBranchStore implements BranchStore {
+    private final List<Branch> branches = new ArrayList<>();
+
+    @Override
+    public List<Branch> findAll() {
+        return new ArrayList<>(branches);
+    }
+
+    @Override
+    public Branch save(Branch branch) {
+        branches.add(branch);
+        return branch;
+    }
+
+    @Override
+    public Optional<Branch> findByAddress(String contactAddress) {
+        return branches.stream()
+                .filter(branch -> branch.getAddress().equals(contactAddress))
+                .findFirst();
     }
 }

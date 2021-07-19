@@ -1,21 +1,24 @@
 package pl.kuba.domain.servises;
 
 import org.springframework.stereotype.Service;
+import pl.kuba.api.request.rentalcompany.RentalCompanyUpdateRequest;
 import pl.kuba.domain.stores.BranchStore;
+import pl.kuba.domain.stores.RentalCompanyStore;
 import pl.kuba.entities.Branch;
 import pl.kuba.entities.RentalCompany;
-import pl.kuba.infrastructure.persistence.RentalCompanyRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class RentalCompanyService {
-    private final RentalCompanyRepository rentalCompanyStore;
+    private final RentalCompanyStore rentalCompanyStore;
     private final BranchStore branchStore;
 
-    public RentalCompanyService(RentalCompanyRepository rentalCompanyRepository, BranchStore branchRepository) {
+    public RentalCompanyService(RentalCompanyStore rentalCompanyRepository, BranchStore branchRepository) {
         this.rentalCompanyStore = rentalCompanyRepository;
         this.branchStore = branchRepository;
     }
@@ -31,7 +34,7 @@ public class RentalCompanyService {
         return branchStore.save(branch);
     }
 
-    public void closeBranch(String address) {
+    public boolean closeBranch(String address) {
         List<Branch> branches = branchStore.findAll();
         Optional<Branch> branchToClose = branches.stream()
                 .filter(branch -> branch.getAddress().equals(address))
@@ -39,23 +42,26 @@ public class RentalCompanyService {
         if (branchToClose.isPresent()) {
             branchToClose.get().setDeleted(true);
             branchStore.save(branchToClose.get());
+            return true;
         } else {
             throw new RuntimeException("Branch doesn't exist");
 
         }
     }
 
-    public RentalCompany updateRentalCompany(RentalCompanyUpdateRequest rentalCompanyUpdateRequest) {
-        Optional<RentalCompany> optionalRentalCompany = rentalCompanyRepository.findByName(rentalCompanyUpdateRequest
-                .getOldName());
+    public RentalCompany updateRentalCompany(String oldName,String newName,String newWebsiteName,
+                                             String newContactAddress,String newOwner) {
+        Optional<RentalCompany> optionalRentalCompany = rentalCompanyStore.findByName(oldName);
         if (optionalRentalCompany.isPresent()) {
             RentalCompany rentalCompany = optionalRentalCompany.get();
-            rentalCompany.setName(rentalCompanyUpdateRequest.getNewName());
-            rentalCompany.setWebsite(rentalCompanyUpdateRequest.getNewWebsiteName());
-            rentalCompany.setContactAddress(rentalCompanyUpdateRequest.getNewContactAddress());
-            rentalCompany.setOwner(rentalCompanyUpdateRequest.getNewOwner());
+            rentalCompany.setName(newName);
+            rentalCompany.setWebsite(newWebsiteName);
+            rentalCompany.setContactAddress(newContactAddress);
+            rentalCompany.setOwner(newOwner);
             rentalCompany.setModificationDate(LocalDateTime.now());
-            return rentalCompanyRepository.save(rentalCompany);
+            validateRentalCompanyData(rentalCompany.getName(),rentalCompany.getWebsite(),
+                    rentalCompany.getContactAddress(),rentalCompany.getOwner());
+            return rentalCompanyStore.save(rentalCompany);
         } else
             throw new RuntimeException("This rental company doesn't exist");
     }

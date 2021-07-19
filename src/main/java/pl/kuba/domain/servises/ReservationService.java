@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 import pl.kuba.domain.stores.CarStore;
 import pl.kuba.domain.stores.ReservationStore;
 import pl.kuba.entities.*;
-import pl.kuba.infrastructure.CarStore;
 import pl.kuba.infrastructure.datehelpers.DateFormatter;
 import pl.kuba.infrastructure.datehelpers.StringToDateConverter;
 import pl.kuba.infrastructure.persistence.RentRepository;

@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 import pl.kuba.domain.stores.CarStore;
 import pl.kuba.entities.Car;
 import pl.kuba.entities.Revenue;
-import pl.kuba.infrastructure.CarStore;
 import pl.kuba.infrastructure.persistence.RevenueRepository;
 
 import java.math.BigDecimal;
@@ -21,17 +20,18 @@ public class RevenueService {
         this.carStore = carRepository;
     }
 
-    public Revenue invest(Car car, BigDecimal price) {
+    public Revenue buyCar(Car car, BigDecimal price) {
         Revenue revenue = new Revenue();
         revenue.setAnnualInvestments(price);
         carStore.save(car);
         return revenueStore.save(revenue);
     }
 
-    public Revenue addPayment(Car car, BigDecimal payment) {
+    public Revenue sellCar(Car car, BigDecimal payment) {
         Revenue revenue = new Revenue();
         revenue.setAnnualIncome(payment);
-        carStore.delete(car);
+        car.setDeleted(true);
+        carStore.save(car);
         return revenueStore.save(revenue);
     }
 
