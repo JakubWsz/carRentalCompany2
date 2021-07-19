@@ -35,6 +35,7 @@ public class CarService {
         Optional<Car> optionalCar = getOptionalCar(id);
         if (optionalCar.isPresent()) {
             optionalCar.get().setCarMileage(carMileage);
+            carStore.save(optionalCar.get());
         } else throwExceptionThereIsNoCarWithPassedId();
     }
 
@@ -44,6 +45,7 @@ public class CarService {
         Optional<Car> optionalCar = getOptionalCar(id);
         if (optionalCar.isPresent()) {
             optionalCar.get().setAmountPerDay(carAmountPerDay);
+            carStore.save(optionalCar.get());
         } else throwExceptionThereIsNoCarWithPassedId();
     }
 
@@ -53,6 +55,7 @@ public class CarService {
         if (optionalCar.isPresent()) {
             optionalCar.get().setAvailabilityStatus(availabilityStatus);
             carNote.append(note);
+            carStore.save(optionalCar.get());
         } else throwExceptionThereIsNoCarWithPassedId();
         return carNote.toString();
     }

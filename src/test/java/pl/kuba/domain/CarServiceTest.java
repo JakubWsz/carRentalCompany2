@@ -21,8 +21,8 @@ class CarServiceTest {
         Car car = new Car("Mercedes", "benc", BodyType.CONVERTIBLE, 1999, "black",
                 10000, AvailabilityStatus.AVAILABLE, BigDecimal.valueOf(120L));
         System.out.println(car.getId());
-        testCarStore.save(car);
         CarService carService = new CarService(new TestCarStore(), null, null);
+        System.out.println(testCarStore.save(car));
 
         //when
         carService.updateCarMileage(0L, 12);

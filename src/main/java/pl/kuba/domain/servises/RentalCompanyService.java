@@ -25,6 +25,8 @@ public class RentalCompanyService {
 
     public RentalCompany configureRentalCompany(String name, String website, String contactAddress, String owner) {
         RentalCompany rentalCompany = new RentalCompany(name, website, contactAddress, owner);
+        validateRentalCompanyData(rentalCompany.getName(),rentalCompany.getWebsite(),rentalCompany.getContactAddress(),
+                rentalCompany.getOwner());
         return rentalCompanyStore.save(rentalCompany);
     }
 
@@ -67,6 +69,8 @@ public class RentalCompanyService {
     }
 
     private void validateRentalCompanyData(String name, String website, String contactAddress, String owner) {
+        if (website == null)
+            throw new RuntimeException(("Website is null"));
         Pattern pattern = Pattern.compile("^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]"
                 , Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(website);
