@@ -28,16 +28,19 @@ public class CarAvailabilityAsDatesService {
     }
 
     public CarAvailabilityAsDates getDatesRangeCarsPotentialAvailability(long id) {
-        LocalDate rentDate = null;
-        LocalDate returnDate = null;
+        LocalDate rentDate;
+        LocalDate returnDate;
         Optional<Rent> optionalRent = getSelectedCarRent(id);
         Optional<Return> optionalReturn = getSelectedCarReturn(id);
+
         if (optionalRent.isPresent()) {
             rentDate = optionalRent.get().getRentDate();
-        }
+        }else throw new RuntimeException("There is no such rent date");
+
         if (optionalReturn.isPresent()) {
             returnDate = optionalReturn.get().getReturnDate();
-        }
+        }else throw new RuntimeException("There is no such return date");
+
         return carAvailabilityAsDatesRepository.save(new CarAvailabilityAsDates(rentDate, returnDate));
     }
 
