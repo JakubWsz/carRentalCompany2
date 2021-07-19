@@ -2,6 +2,8 @@ package pl.kuba.domain;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import pl.kuba.domain.servises.CarService;
+import pl.kuba.domain.stores.CarStore;
 import pl.kuba.entities.AvailabilityStatus;
 import pl.kuba.entities.BodyType;
 import pl.kuba.entities.Car;
