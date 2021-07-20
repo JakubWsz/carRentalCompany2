@@ -1,11 +1,10 @@
-package pl.kuba.domain;
+package pl.kuba.domain.servises;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import pl.kuba.domain.repository.TestBranchStore;
 import pl.kuba.domain.repository.TestCarStore;
 import pl.kuba.domain.repository.TestReservationStore;
-import pl.kuba.domain.servises.CarService;
 import pl.kuba.entities.*;
 
 import java.math.BigDecimal;

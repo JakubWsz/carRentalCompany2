@@ -10,7 +10,6 @@ import pl.kuba.entities.RentalCompany;
 
 @RestController
 @RequestMapping("/rental-company")
-@CrossOrigin(origins = "http://localhost:4200")
 public class RentalCompanyAPI {
     private final RentalCompanyService rentalCompanyService;
 
