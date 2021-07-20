@@ -23,7 +23,7 @@ public class DatabaseBranchStore implements BranchStore {
 
     @Override
     public Branch save(Branch branch) {
-        return branchRepository.save(new Branch());
+        return branchRepository.save(branch);
     }
 
     @Override

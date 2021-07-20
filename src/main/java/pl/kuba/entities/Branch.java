@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -18,6 +19,8 @@ public class Branch extends BaseEntity {
 
     public Branch(String address) {
         this.address = address;
+        this.workers = new ArrayList<>();
+        this.availableCars = new ArrayList<>();
     }
 
     public Branch() {}
