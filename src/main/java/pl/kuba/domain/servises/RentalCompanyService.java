@@ -25,6 +25,8 @@ public class RentalCompanyService {
 
     public RentalCompany configureRentalCompany(String name, String website, String contactAddress, String owner) {
         RentalCompany rentalCompany = new RentalCompany(name, website, contactAddress, owner);
+        validateRentalCompanyData(rentalCompany.getName(), rentalCompany.getWebsite(), rentalCompany.getContactAddress()
+                , rentalCompany.getOwner());
         return rentalCompanyStore.save(rentalCompany);
     }
 
@@ -49,8 +51,8 @@ public class RentalCompanyService {
         }
     }
 
-    public RentalCompany updateRentalCompany(String oldName,String newName,String newWebsiteName,
-                                             String newContactAddress,String newOwner) {
+    public RentalCompany updateRentalCompany(String oldName, String newName, String newWebsiteName,
+                                             String newContactAddress, String newOwner) {
         Optional<RentalCompany> optionalRentalCompany = rentalCompanyStore.findByName(oldName);
         if (optionalRentalCompany.isPresent()) {
             RentalCompany rentalCompany = optionalRentalCompany.get();
@@ -59,14 +61,17 @@ public class RentalCompanyService {
             rentalCompany.setContactAddress(newContactAddress);
             rentalCompany.setOwner(newOwner);
             rentalCompany.setModificationDate(LocalDateTime.now());
-            validateRentalCompanyData(rentalCompany.getName(),rentalCompany.getWebsite(),
-                    rentalCompany.getContactAddress(),rentalCompany.getOwner());
+            validateRentalCompanyData(rentalCompany.getName(), rentalCompany.getWebsite(),
+                    rentalCompany.getContactAddress(), rentalCompany.getOwner());
             return rentalCompanyStore.save(rentalCompany);
         } else
             throw new RuntimeException("This rental company doesn't exist");
     }
 
     private void validateRentalCompanyData(String name, String website, String contactAddress, String owner) {
+        if (website == null)
+            throw new RuntimeException(("Website is null"));
+
         Pattern pattern = Pattern.compile("^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]"
                 , Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(website);
@@ -75,8 +80,10 @@ public class RentalCompanyService {
         }
         if (name == null)
             throw new RuntimeException(("Name is null"));
+
         if (contactAddress == null)
             throw new RuntimeException(("Contact address is null"));
+
         if (owner == null)
             throw new RuntimeException(("Owner is null"));
     }
