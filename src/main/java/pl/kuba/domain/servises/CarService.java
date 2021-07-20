@@ -8,11 +8,8 @@ import pl.kuba.entities.AvailabilityStatus;
 import pl.kuba.entities.Branch;
 import pl.kuba.entities.Car;
 import pl.kuba.entities.Reservation;
-import pl.kuba.infrastructure.datehelpers.StringToDateConverter;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -24,9 +21,9 @@ public class CarService {
     private final BranchStore branchStore;
 
 
-    public CarService(CarStore carStore, BranchStore branchRepository, ReservationStore reservationStore) {
+    public CarService(CarStore carStore, BranchStore branchStore, ReservationStore reservationStore) {
         this.carStore = carStore;
-        this.branchStore = branchRepository;
+        this.branchStore = branchStore;
         this.reservationStore = reservationStore;
     }
 
@@ -56,12 +53,11 @@ public class CarService {
         return carNote.toString();
     }
 
-    public List<Car> getAvailableCars(String branchLocation, String date) throws ParseException {
-        Reservation selectedReservation = getReservationByDate(date);
+    public List<Car> getAvailableCars(String branchLocation) {
         return reservationStore.findAll().stream()
-                .filter(reservation -> reservation.getRentDate().equals(selectedReservation.getRentDate()))
                 .filter(reservation -> reservation.getRentingBranch().equals(getSelectedBranch(branchLocation)))
                 .map(Reservation::getCar)
+                .filter(car -> car.getAvailabilityStatus() == AvailabilityStatus.AVAILABLE)
                 .collect(Collectors.toList());
     }
 
@@ -71,15 +67,6 @@ public class CarService {
 
     private Optional<Car> getOptionalCar(long id) {
         return carStore.findById(id);
-    }
-
-    private Reservation getReservationByDate(String date) throws ParseException {
-        Optional<Reservation> optionalReservation = getOptionalReservationByDate(date);
-        Reservation reservation;
-        if (optionalReservation.isPresent()) {
-            reservation = optionalReservation.get();
-        } else throw new RuntimeException("There is no reservation on this date");
-        return reservation;
     }
 
     private Branch getSelectedBranch(String branchLocation) {
@@ -93,14 +80,6 @@ public class CarService {
 
     private List<Branch> getAllBranches() {
         return branchStore.findAll();
-    }
-
-    private Optional<Reservation> getOptionalReservationByDate(String date) throws ParseException {
-        LocalDate dateToCheck = StringToDateConverter.convertStringToDate(date);
-        List<Reservation> reservations = reservationStore.findAll();
-        return reservations.stream()
-                .filter(reservation -> reservation.getReservationDate().equals(dateToCheck))
-                .findFirst();
     }
 
     private Optional<Branch> getOptionalBranch(String branchLocation) {

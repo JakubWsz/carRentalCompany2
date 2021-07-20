@@ -19,24 +19,14 @@ public class CarAPI {
         this.carService = carService;
     }
 
-    @GetMapping("available")
-    public List<Car> getAvailableCars(@RequestParam AvailableCarRequest availableCarRequest) throws ParseException {
+    @GetMapping("/available")
+    public List<Car> getAvailableCars(@RequestParam AvailableCarRequest availableCarRequest) {
         return carService.getAvailableCars(
-                availableCarRequest.getBranchLocation(),
-                availableCarRequest.getDate()
+                availableCarRequest.getBranchLocation()
         );
     }
 
-    @GetMapping("status")
-    public Map<LocalDate, AvailabilityStatus> getCarAvailabilityStatusByParticularDate(
-            @RequestParam CarAvailabilityStatusRequest carAvailabilityStatusRequest) throws ParseException {
-        return carService.getCarAvailabilityStatusByParticularDate(
-                carAvailabilityStatusRequest.getId(),
-                carAvailabilityStatusRequest.getDate()
-        );
-    }
-
-    @PutMapping("status")
+    @PutMapping("/status")
     public String updateAvailabilityStatus(@RequestParam UpdateCarAvailabilityStatusRequest updateCarAvailabilityStatusRequest) {
         return carService.updateAvailabilityStatus(
                 updateCarAvailabilityStatusRequest.getId(),
@@ -45,7 +35,7 @@ public class CarAPI {
         );
     }
 
-    @PutMapping("amount")
+    @PutMapping("/amount")
     public void updateCarAmountPerDay(@RequestParam UpdateCarAmountRequest updateCarAmountRequest) {
         carService.updateCarAmountPerDay(
                 updateCarAmountRequest.getId(),
@@ -54,7 +44,7 @@ public class CarAPI {
         );
     }
 
-    @PutMapping("mileage")
+    @PutMapping("/mileage")
     public void updateCarMileage(@RequestParam UpdateCarMileageRequest updateCarMileageRequest) {
         carService.updateCarMileage(updateCarMileageRequest.getId(),
                 updateCarMileageRequest.getCarMileage()
