@@ -27,6 +27,7 @@ public class RentalCompanyService {
         RentalCompany rentalCompany = new RentalCompany(name, website, contactAddress, owner);
         validateRentalCompanyData(rentalCompany.getName(), rentalCompany.getWebsite(), rentalCompany.getContactAddress()
                 , rentalCompany.getOwner());
+        rentalCompany.setModificationDate(LocalDateTime.now());
         return rentalCompanyStore.save(rentalCompany);
     }
 
@@ -39,10 +40,12 @@ public class RentalCompanyService {
     public boolean closeBranch(String address) {
         List<Branch> branches = branchStore.findAll();
         Optional<Branch> branchToClose = branches.stream()
+                .filter(branch -> !branch.isDeleted())
                 .filter(branch -> branch.getAddress().equals(address))
                 .findFirst();
         if (branchToClose.isPresent()) {
             branchToClose.get().setDeleted(true);
+            branchToClose.get().setModificationDate(LocalDateTime.now());
             branchStore.save(branchToClose.get());
             return true;
         } else {

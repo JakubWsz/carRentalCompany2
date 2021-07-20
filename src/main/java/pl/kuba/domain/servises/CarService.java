@@ -10,6 +10,7 @@ import pl.kuba.entities.Car;
 import pl.kuba.entities.Reservation;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -31,6 +32,8 @@ public class CarService {
         Optional<Car> optionalCar = getOptionalCar(id);
         if (optionalCar.isPresent()) {
             optionalCar.get().setCarMileage(carMileage);
+            optionalCar.get().setModificationDate(LocalDateTime.now());
+            carStore.save(optionalCar.get());
         } else throwExceptionThereIsNoCarWithPassedId();
     }
 
@@ -40,6 +43,8 @@ public class CarService {
         Optional<Car> optionalCar = getOptionalCar(id);
         if (optionalCar.isPresent()) {
             optionalCar.get().setAmountPerDay(carAmountPerDay);
+            optionalCar.get().setModificationDate(LocalDateTime.now());
+            carStore.save(optionalCar.get());
         } else throwExceptionThereIsNoCarWithPassedId();
     }
 
@@ -48,6 +53,8 @@ public class CarService {
         Optional<Car> optionalCar = getOptionalCar(id);
         if (optionalCar.isPresent()) {
             optionalCar.get().setAvailabilityStatus(availabilityStatus);
+            optionalCar.get().setModificationDate(LocalDateTime.now());
+            carStore.save(optionalCar.get());
             carNote.append(note);
         } else throwExceptionThereIsNoCarWithPassedId();
         return carNote.toString();
@@ -84,6 +91,7 @@ public class CarService {
 
     private Optional<Branch> getOptionalBranch(String branchLocation) {
         return getAllBranches().stream()
+                .filter(branch -> !branch.isDeleted())
                 .filter(branch -> branch.getAddress().equals(branchLocation))
                 .findFirst();
     }
