@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import pl.kuba.entities.Client;
 import pl.kuba.infrastructure.persistence.ClientRepository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,7 @@ public class ClientService {
 
     public void addNewClient(Client client) {
        if (isEmailExists(client)) {
+           client.setModificationDate(LocalDateTime.now());
            clientStore.save(client);
         } else throw new RuntimeException("Account with this email already exist");
     }

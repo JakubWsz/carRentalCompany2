@@ -7,6 +7,7 @@ import pl.kuba.entities.Revenue;
 import pl.kuba.infrastructure.persistence.RevenueRepository;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,7 +24,9 @@ public class RevenueService {
     public Revenue buyCar(Car car, BigDecimal price) {
         Revenue revenue = new Revenue();
         revenue.setAnnualInvestments(price);
+        car.setModificationDate(LocalDateTime.now());
         carStore.save(car);
+        revenue.setModificationDate(LocalDateTime.now());
         return revenueStore.save(revenue);
     }
 
@@ -31,7 +34,9 @@ public class RevenueService {
         Revenue revenue = new Revenue();
         revenue.setAnnualIncome(payment);
         car.setDeleted(true);
+        car.setModificationDate(LocalDateTime.now());
         carStore.save(car);
+        revenue.setModificationDate(LocalDateTime.now());
         return revenueStore.save(revenue);
     }
 

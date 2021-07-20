@@ -6,6 +6,7 @@ import pl.kuba.domain.stores.WorkerStore;
 import pl.kuba.entities.Branch;
 import pl.kuba.entities.Worker;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,14 +30,17 @@ public class BranchManagementService {
                     workers.add(worker);
                     branch1.setWorkers(workers);
                 });
+        worker.setModificationDate(LocalDateTime.now());
         return workerStore.save(worker);
     }
 
     public void fireWorker(Branch branch, long workerId) {
         Optional<Worker> firedWorker = findAllWorkers().stream()
+                .filter(worker -> !worker.isDeleted())
                 .filter(worker -> worker.getId() == workerId)
                 .findFirst();
         firedWorker.ifPresent(worker -> findAllBranches().stream()
+                .filter(branch1 -> !branch.isDeleted())
                 .filter(targetBranch -> targetBranch.getId() == branch.getId())
                 .findFirst()
                 .ifPresent(targetBranch -> {
@@ -46,6 +50,7 @@ public class BranchManagementService {
                 }));
         if (firedWorker.isPresent()) {
             firedWorker.get().setDeleted(true);
+            firedWorker.get().setModificationDate(LocalDateTime.now());
             workerStore.save(firedWorker.get());
         } else {
             throw new RuntimeException("Worker doesn't exist");
