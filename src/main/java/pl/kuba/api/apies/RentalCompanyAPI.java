@@ -8,6 +8,8 @@ import pl.kuba.domain.servises.RentalCompanyService;
 import pl.kuba.entities.Branch;
 import pl.kuba.entities.RentalCompany;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/rental-company")
 public class RentalCompanyAPI {
@@ -25,6 +27,11 @@ public class RentalCompanyAPI {
                 rentalCompanyConfigRequest.getContactAddress(),
                 rentalCompanyConfigRequest.getOwner()
         );
+    }
+
+    @GetMapping("get-all-branches")
+    public List<Branch> getAllBranch(){
+        return rentalCompanyService.getAllBranches();
     }
 
     @PostMapping("/open-new-branch")

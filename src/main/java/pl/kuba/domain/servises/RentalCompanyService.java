@@ -71,6 +71,10 @@ public class RentalCompanyService {
             throw new RuntimeException("This rental company doesn't exist");
     }
 
+    public List<Branch> getAllBranches(){
+       return branchStore.findAll();
+    }
+
     private void validateRentalCompanyData(String name, String website, String contactAddress, String owner) {
         if (website == null)
             throw new RuntimeException(("Website is null"));
