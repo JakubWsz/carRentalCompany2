@@ -3,7 +3,7 @@ package pl.kuba.api.apies;
 import org.springframework.web.bind.annotation.*;
 import pl.kuba.api.request.branch.management.BranchManagementFireRequest;
 import pl.kuba.api.request.branch.management.BranchManagementHireRequest;
-import pl.kuba.domain.servises.BranchManagementService;
+import pl.kuba.domain.services.BranchManagementService;
 import pl.kuba.entities.Worker;
 
 @RestController

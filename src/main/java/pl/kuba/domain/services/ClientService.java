@@ -1,4 +1,4 @@
-package pl.kuba.domain.servises;
+package pl.kuba.domain.services;
 
 import org.springframework.stereotype.Service;
 import pl.kuba.entities.Client;

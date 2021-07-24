@@ -6,6 +6,7 @@ import pl.kuba.entities.Reservation;
 import pl.kuba.infrastructure.persistence.ReservationRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class DatabaseReservationStore implements ReservationStore {
@@ -23,5 +24,10 @@ public class DatabaseReservationStore implements ReservationStore {
     @Override
     public List<Reservation> findAll() {
         return reservationRepository.findAll();
+    }
+
+    @Override
+    public Optional<Reservation> findById(long id) {
+        return reservationRepository.findById(id);
     }
 }

@@ -1,4 +1,4 @@
-package pl.kuba.domain.servises;
+package pl.kuba.domain.services;
 
 import org.springframework.stereotype.Service;
 import pl.kuba.domain.stores.CarStore;
@@ -9,10 +9,7 @@ import pl.kuba.infrastructure.datehelpers.StringToDateConverter;
 import pl.kuba.infrastructure.persistence.RentRepository;
 import pl.kuba.infrastructure.persistence.ReturnRepository;
 
-import java.text.ParseException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -43,9 +40,7 @@ public class ReservationService {
         Reservation reservation = new Reservation(getTodayDate(), client, car, rentDateAsDate, returnDateAsDate, rentingBranch,
                 receivingBranch, actualCar.getAmountPerDay());
         Rent rent = rentCreator(rentingWorker, rentDateAsDate, reservation, comment);
-        rent.setModificationDate(LocalDateTime.now());
         rentStore.save(rent);
-        reservation.setModificationDate(LocalDateTime.now());
         return reservationStore.save(reservation);
     }
 
@@ -57,7 +52,6 @@ public class ReservationService {
         returnVariable.setReservation(reservation);
         returnVariable.setSurcharge(surcharge);
         returnVariable.setComment(comment);
-        returnVariable.setModificationDate(LocalDateTime.now());
         return returnStore.save(returnVariable);
     }
 
@@ -65,7 +59,6 @@ public class ReservationService {
         Optional<Reservation> optionalReservation = findOptionalReservationById(reservationId);
         if (optionalReservation.isPresent()) {
             optionalReservation.get().setDeleted(true);
-            optionalReservation.get().setModificationDate(LocalDateTime.now());
             reservationStore.save(optionalReservation.get());
         } else {
             throwExceptionThereIsNoReservationWithPassedId();
@@ -74,7 +67,6 @@ public class ReservationService {
 
     private Optional<Reservation> findOptionalReservationById(long reservationId) {
         return reservationStore.findAll().stream()
-                .filter(reservation -> !reservation.isDeleted())
                 .filter(reservation -> reservation.getId() == reservationId)
                 .findFirst();
     }
@@ -90,7 +82,6 @@ public class ReservationService {
 
     private Optional<Car> getOptionalCar(Car car) {
         return carStore.findAll().stream()
-                .filter(car1 -> !car1.isDeleted())
                 .filter(car1 -> car1.getId() == car.getId())
                 .findFirst();
     }
@@ -101,7 +92,6 @@ public class ReservationService {
         rent.setReservation(reservation);
         rent.setRentDate(rentDate);
         rent.setComment(comment);
-        rent.setModificationDate(LocalDateTime.now());
         return rent;
     }
 }

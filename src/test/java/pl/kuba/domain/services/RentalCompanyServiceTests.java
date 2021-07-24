@@ -1,10 +1,9 @@
-package pl.kuba.domain;
+package pl.kuba.domain.services;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import pl.kuba.domain.repository.TestBranchStore;
 import pl.kuba.domain.repository.TestRentalCompanyStore;
-import pl.kuba.domain.servises.RentalCompanyService;
 import pl.kuba.entities.Branch;
 import pl.kuba.entities.RentalCompany;
 

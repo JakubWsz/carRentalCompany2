@@ -1,7 +1,6 @@
-package pl.kuba.domain.servises;
+package pl.kuba.domain.services;
 
 import org.springframework.stereotype.Service;
-import pl.kuba.api.request.rentalcompany.RentalCompanyUpdateRequest;
 import pl.kuba.domain.stores.BranchStore;
 import pl.kuba.domain.stores.RentalCompanyStore;
 import pl.kuba.entities.Branch;
@@ -69,6 +68,10 @@ public class RentalCompanyService {
             return rentalCompanyStore.save(rentalCompany);
         } else
             throw new RuntimeException("This rental company doesn't exist");
+    }
+
+    public List<Branch> getAllBranches(){
+       return branchStore.findAll();
     }
 
     private void validateRentalCompanyData(String name, String website, String contactAddress, String owner) {

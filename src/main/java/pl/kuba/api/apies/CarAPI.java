@@ -2,14 +2,10 @@ package pl.kuba.api.apies;
 
 import org.springframework.web.bind.annotation.*;
 import pl.kuba.api.request.car.*;
-import pl.kuba.domain.servises.CarService;
-import pl.kuba.entities.AvailabilityStatus;
+import pl.kuba.domain.services.CarService;
 import pl.kuba.entities.Car;
 
-import java.text.ParseException;
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 @RestController("/car")
 public class CarAPI {
