@@ -1,4 +1,4 @@
-package pl.kuba.domain.servises;
+package pl.kuba.domain.services;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

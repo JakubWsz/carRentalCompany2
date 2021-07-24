@@ -1,4 +1,4 @@
-package pl.kuba.domain.servises;
+package pl.kuba.domain.services;
 
 import org.springframework.stereotype.Service;
 import pl.kuba.domain.stores.CarStore;
@@ -9,9 +9,7 @@ import pl.kuba.infrastructure.datehelpers.StringToDateConverter;
 import pl.kuba.infrastructure.persistence.RentRepository;
 import pl.kuba.infrastructure.persistence.ReturnRepository;
 
-import java.text.ParseException;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.Optional;
 
 @Service
