@@ -1,6 +1,8 @@
 package pl.kuba.domain.services;
 
 import org.springframework.stereotype.Service;
+import pl.kuba.api.dto.response.user.BranchDetailsView;
+import pl.kuba.api.dto.response.user.BranchView;
 import pl.kuba.domain.stores.BranchStore;
 import pl.kuba.domain.stores.RentalCompanyStore;
 import pl.kuba.entities.Branch;
@@ -11,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 public class RentalCompanyService {
@@ -53,14 +56,18 @@ public class RentalCompanyService {
         }
     }
 
-    public Branch getParticularBranch(long id){
-     Optional<Branch> optionalBranch = getAllBranches().stream()
+    public BranchDetailsView getParticularBranch(long id) {
+        Optional<Branch> optionalBranch = getAllBranches().stream()
                 .filter(branch -> branch.getId() == id)
                 .findFirst();
-     if (optionalBranch.isPresent()){
-        return optionalBranch.get();
-     }
-     else throw new RuntimeException("This branch doesn't exist");
+        if (optionalBranch.isPresent()) {
+            return map(optionalBranch.get());
+        } else throw new RuntimeException("This branch doesn't exist");
+    }
+
+    private BranchDetailsView map(Branch branch) {
+        return new BranchDetailsView(branch.getId(), branch.getAddress(), branch.getWorkers(),
+                branch.getAvailableCars());
     }
 
     public RentalCompany updateRentalCompany(String oldName, String newName, String newWebsiteName,
@@ -80,8 +87,14 @@ public class RentalCompanyService {
             throw new RuntimeException("This rental company doesn't exist");
     }
 
-    public List<Branch> getAllBranches(){
-       return branchStore.findAll();
+    public List<BranchView> getAllBranchViews() {
+        return getAllBranches().stream()
+                .map(branch -> new BranchView(branch.getId(), branch.getAddress()))
+                .collect(Collectors.toList());
+    }
+
+    private List<Branch> getAllBranches() {
+        return branchStore.findAll();
     }
 
     private void validateRentalCompanyData(String name, String website, String contactAddress, String owner) {

@@ -4,6 +4,7 @@ package pl.kuba.api.rest;
 import org.springframework.web.bind.annotation.*;
 import pl.kuba.api.dto.request.rentalcompany.RentalCompanyConfigRequest;
 import pl.kuba.api.dto.request.rentalcompany.RentalCompanyUpdateRequest;
+import pl.kuba.api.dto.response.user.BranchDetailsView;
 import pl.kuba.api.dto.response.user.BranchView;
 import pl.kuba.domain.services.RentalCompanyService;
 import pl.kuba.entities.Branch;
@@ -30,13 +31,13 @@ public class RentalCompanyAPI {
         );
     }
 
-    @GetMapping("get-all-branches")
-    public List<BranchView> getAllBranch(@RequestParam List<BranchView> branchView) {
-        return branchView;
+    @GetMapping("/get-all-branches")
+    public List<BranchView> getAllBranch() {
+        return rentalCompanyService.getAllBranchViews();
     }
 
     @GetMapping("/branch/{id}")
-    public Branch getParticularBranch(@PathVariable long id) {
+    public BranchDetailsView getParticularBranch(@PathVariable long id) {
         return rentalCompanyService.getParticularBranch(id);
     }
 
