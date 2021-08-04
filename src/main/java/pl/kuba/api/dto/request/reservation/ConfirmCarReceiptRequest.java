@@ -1,4 +1,4 @@
-package pl.kuba.api.request.reservation;
+package pl.kuba.api.dto.request.reservation;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,7 +6,6 @@ import pl.kuba.entities.Reservation;
 import pl.kuba.entities.Worker;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Getter
 @AllArgsConstructor
