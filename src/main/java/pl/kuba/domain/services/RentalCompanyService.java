@@ -53,6 +53,16 @@ public class RentalCompanyService {
         }
     }
 
+    public Branch getParticularBranch(long id){
+     Optional<Branch> optionalBranch = getAllBranches().stream()
+                .filter(branch -> branch.getId() == id)
+                .findFirst();
+     if (optionalBranch.isPresent()){
+        return optionalBranch.get();
+     }
+     else throw new RuntimeException("This branch doesn't exist");
+    }
+
     public RentalCompany updateRentalCompany(String oldName, String newName, String newWebsiteName,
                                              String newContactAddress, String newOwner) {
         Optional<RentalCompany> optionalRentalCompany = rentalCompanyStore.findByName(oldName);
