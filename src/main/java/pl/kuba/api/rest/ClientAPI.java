@@ -1,4 +1,4 @@
-package pl.kuba.api.apies;
+package pl.kuba.api.rest;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

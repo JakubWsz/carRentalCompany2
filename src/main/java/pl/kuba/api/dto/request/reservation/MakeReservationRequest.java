@@ -1,4 +1,4 @@
-package pl.kuba.api.request.reservation;
+package pl.kuba.api.dto.request.reservation;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

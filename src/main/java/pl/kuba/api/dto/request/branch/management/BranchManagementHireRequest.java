@@ -1,4 +1,4 @@
-package pl.kuba.api.request.branch.management;
+package pl.kuba.api.dto.request.branch.management;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

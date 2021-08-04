@@ -1,4 +1,4 @@
-package pl.kuba.api.request.car;
+package pl.kuba.api.dto.request.car;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

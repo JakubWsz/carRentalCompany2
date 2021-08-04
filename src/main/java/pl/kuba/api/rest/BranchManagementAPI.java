@@ -1,8 +1,8 @@
-package pl.kuba.api.apies;
+package pl.kuba.api.rest;
 
 import org.springframework.web.bind.annotation.*;
-import pl.kuba.api.request.branch.management.BranchManagementFireRequest;
-import pl.kuba.api.request.branch.management.BranchManagementHireRequest;
+import pl.kuba.api.dto.request.branch.management.BranchManagementFireRequest;
+import pl.kuba.api.dto.request.branch.management.BranchManagementHireRequest;
 import pl.kuba.domain.services.BranchManagementService;
 import pl.kuba.entities.Worker;
 

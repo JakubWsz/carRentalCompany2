@@ -1,4 +1,4 @@
-package pl.kuba.api.request.rentalcompany;
+package pl.kuba.api.dto.request.rentalcompany;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,9 +1,9 @@
-package pl.kuba.api.apies;
+package pl.kuba.api.rest;
 
 
 import org.springframework.web.bind.annotation.*;
-import pl.kuba.api.request.rentalcompany.RentalCompanyConfigRequest;
-import pl.kuba.api.request.rentalcompany.RentalCompanyUpdateRequest;
+import pl.kuba.api.dto.request.rentalcompany.RentalCompanyConfigRequest;
+import pl.kuba.api.dto.request.rentalcompany.RentalCompanyUpdateRequest;
 import pl.kuba.domain.services.RentalCompanyService;
 import pl.kuba.entities.Branch;
 import pl.kuba.entities.RentalCompany;
