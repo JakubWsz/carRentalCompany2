@@ -70,6 +70,10 @@ public class RentalCompanyService {
                 branch.getAvailableCars());
     }
 
+    public RentalCompany patchBranchAddress(long id, String address){
+       return rentalCompanyStore.patchBranchAddress(id,address);
+    }
+
     public RentalCompany updateRentalCompany(String oldName, String newName, String newWebsiteName,
                                              String newContactAddress, String newOwner) {
         Optional<RentalCompany> optionalRentalCompany = rentalCompanyStore.findByName(oldName);

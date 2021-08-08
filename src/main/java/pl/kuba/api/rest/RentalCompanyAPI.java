@@ -60,4 +60,8 @@ public class RentalCompanyAPI {
                 rentalCompanyUpdateRequest.getNewContactAddress(),
                 rentalCompanyUpdateRequest.getNewOwner());
     }
+    @PatchMapping("/update-company-address/{id}")
+    public void updateBranchCompanyAddress(@RequestBody String address, @PathVariable long id){
+        rentalCompanyService.patchBranchAddress(id,address);
+    }
 }
