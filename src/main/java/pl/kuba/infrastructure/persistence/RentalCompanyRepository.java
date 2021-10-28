@@ -9,5 +9,4 @@ import java.util.Optional;
 @Repository
 public interface RentalCompanyRepository extends JpaRepository<RentalCompany,Long> {
     Optional<RentalCompany> findByName(String name);
-    RentalCompany patchBranchAddress(long id, String address);
 }

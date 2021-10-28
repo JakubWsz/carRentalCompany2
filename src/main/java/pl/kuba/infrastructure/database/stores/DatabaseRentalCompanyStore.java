@@ -24,9 +24,4 @@ public class DatabaseRentalCompanyStore implements RentalCompanyStore {
     public RentalCompany save(RentalCompany rentalCompany) {
         return rentalCompanyRepository.save(rentalCompany);
     }
-
-    @Override
-    public RentalCompany patchBranchAddress(long id, String address) {
-        return rentalCompanyRepository.patchBranchAddress(id, address);
-    }
 }

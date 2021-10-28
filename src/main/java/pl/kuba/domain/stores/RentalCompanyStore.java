@@ -8,6 +8,4 @@ public interface RentalCompanyStore {
     Optional<RentalCompany> findByName(String name);
 
     RentalCompany save(RentalCompany rentalCompany);
-
-    RentalCompany patchBranchAddress(long id, String address);
 }

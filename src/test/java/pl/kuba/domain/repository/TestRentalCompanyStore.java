@@ -22,9 +22,4 @@ public class TestRentalCompanyStore implements RentalCompanyStore {
         rentalCompanies.add(rentalCompany);
         return rentalCompany;
     }
-
-    @Override
-    public RentalCompany patchBranchAddress(long id, String address) {
-        return null;
-    }
 }
