@@ -1,5 +1,6 @@
 package pl.kuba.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,6 +11,7 @@ import java.util.Date;
 
 @Getter
 @Setter
+@AllArgsConstructor
 @Entity
 public class Rent extends BaseEntity{
     @ManyToOne
@@ -18,4 +20,8 @@ public class Rent extends BaseEntity{
     @ManyToOne
     private Reservation reservation;
     private String comment;
+
+    public Rent() {
+
+    }
 }
