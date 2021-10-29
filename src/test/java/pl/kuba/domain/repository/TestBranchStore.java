@@ -22,6 +22,11 @@ public class TestBranchStore implements BranchStore {
     }
 
     @Override
+    public Optional<Branch> findById(long id) {
+        return Optional.empty();
+    }
+
+    @Override
     public Optional<Branch> findByAddress(String contactAddress) {
         return branches.stream()
                 .filter(branch -> branch.getAddress().equals(contactAddress))

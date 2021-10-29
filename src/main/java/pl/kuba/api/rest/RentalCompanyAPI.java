@@ -1,9 +1,8 @@
 package pl.kuba.api.rest;
 
-
 import org.springframework.web.bind.annotation.*;
+import pl.kuba.api.dto.request.branch.UpdateBranchRequest;
 import pl.kuba.api.dto.request.rentalcompany.RentalCompanyConfigRequest;
-import pl.kuba.api.dto.request.rentalcompany.RentalCompanyUpdateRequest;
 import pl.kuba.api.dto.response.user.BranchDetailsView;
 import pl.kuba.api.dto.response.user.BranchView;
 import pl.kuba.domain.services.RentalCompanyService;
@@ -51,13 +50,23 @@ public class RentalCompanyAPI {
         rentalCompanyService.closeBranch(address);
     }
 
-    @PutMapping("/update-company")
-    public void updateRentalCompany(@RequestBody RentalCompanyUpdateRequest rentalCompanyUpdateRequest) {
-        rentalCompanyService.updateRentalCompany(
-                rentalCompanyUpdateRequest.getOldName(),
-                rentalCompanyUpdateRequest.getNewName(),
-                rentalCompanyUpdateRequest.getNewWebsiteName(),
-                rentalCompanyUpdateRequest.getNewContactAddress(),
-                rentalCompanyUpdateRequest.getNewOwner());
+    @PatchMapping("/branch/{id}")
+    public BranchDetailsView updateBranch(@RequestBody UpdateBranchRequest updateBranch, @PathVariable long id) {
+        return rentalCompanyService.updateBranch(updateBranch, id);
     }
+
+//    @PutMapping("/update-company")
+//    public void updateRentalCompany(@RequestBody RentalCompanyUpdateRequest rentalCompanyUpdateRequest) {
+//        rentalCompanyService.updateRentalCompany(
+//                rentalCompanyUpdateRequest.getOldName(),
+//                rentalCompanyUpdateRequest.getNewName(),
+//                rentalCompanyUpdateRequest.getNewWebsiteName(),
+//                rentalCompanyUpdateRequest.getNewContactAddress(),
+//                rentalCompanyUpdateRequest.getNewOwner());
+//    }
+//    @PatchMapping("/update-company-address/{id}")
+//    public void updateBranchCompanyAddress(@RequestBody RentalCompanyUpdateRequest rentalCompanyUpdateRequest,
+//                                           @PathVariable long id){
+//        rentalCompanyService.patchBranchAddress(id,address);
+//    }
 }

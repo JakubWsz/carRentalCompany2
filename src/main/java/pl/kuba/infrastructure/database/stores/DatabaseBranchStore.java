@@ -30,4 +30,9 @@ public class DatabaseBranchStore implements BranchStore {
     public Optional<Branch> findByAddress(String contactAddress) {
         return branchRepository.findByAddress(contactAddress);
     }
+
+    @Override
+    public Optional<Branch> findById(long id) {
+        return branchRepository.findById(id);
+    }
 }

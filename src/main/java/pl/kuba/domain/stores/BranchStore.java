@@ -10,5 +10,7 @@ public interface BranchStore {
 
     Branch save(Branch branch);
 
+    Optional <Branch> findById(long id);
+
     Optional<Branch> findByAddress(String contactAddress);
 }

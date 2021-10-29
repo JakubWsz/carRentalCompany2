@@ -1,6 +1,7 @@
 package pl.kuba.api.rest;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pl.kuba.api.dto.request.car.CarAvailabilityStatusRequest;
@@ -10,7 +11,8 @@ import pl.kuba.entities.AvailabilityStatus;
 import java.time.LocalDate;
 import java.util.Map;
 
-@RestController("/car-availability")
+@RestController
+@RequestMapping("/car-availability")
 public class CarAvailabilityAsDatesAPI {
     private final CarAvailabilityAsDatesService carAvailabilityAsDatesService;
 
@@ -20,10 +22,7 @@ public class CarAvailabilityAsDatesAPI {
 
     @GetMapping("/status")
     public Map<LocalDate, AvailabilityStatus> getCarAvailabilityStatusByParticularDate(
-            @RequestParam CarAvailabilityStatusRequest carAvailabilityStatusRequest) {
-        return carAvailabilityAsDatesService.getCarAvailabilityStatusByParticularDate(
-                carAvailabilityStatusRequest.getId(),
-                carAvailabilityStatusRequest.getDate()
-        );
+            @RequestParam long id, @RequestParam String date) {
+        return carAvailabilityAsDatesService.getCarAvailabilityStatusByParticularDate(id, date);
     }
 }

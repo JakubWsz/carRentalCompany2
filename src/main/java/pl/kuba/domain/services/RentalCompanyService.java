@@ -1,6 +1,7 @@
 package pl.kuba.domain.services;
 
 import org.springframework.stereotype.Service;
+import pl.kuba.api.dto.request.branch.UpdateBranchRequest;
 import pl.kuba.api.dto.response.user.BranchDetailsView;
 import pl.kuba.api.dto.response.user.BranchView;
 import pl.kuba.domain.stores.BranchStore;
@@ -57,17 +58,7 @@ public class RentalCompanyService {
     }
 
     public BranchDetailsView getParticularBranch(long id) {
-        Optional<Branch> optionalBranch = getAllBranches().stream()
-                .filter(branch -> branch.getId() == id)
-                .findFirst();
-        if (optionalBranch.isPresent()) {
-            return map(optionalBranch.get());
-        } else throw new RuntimeException("This branch doesn't exist");
-    }
-
-    private BranchDetailsView map(Branch branch) {
-        return new BranchDetailsView(branch.getId(), branch.getAddress(), branch.getWorkers(),
-                branch.getAvailableCars());
+        return map(getBranchById(id));
     }
 
     public RentalCompany updateRentalCompany(String oldName, String newName, String newWebsiteName,
@@ -93,6 +84,13 @@ public class RentalCompanyService {
                 .collect(Collectors.toList());
     }
 
+    public BranchDetailsView updateBranch(UpdateBranchRequest updateBranch, long id) {
+    Branch branch = getBranchById(id);
+    updatePartiallyBranch(branch,updateBranch);
+    branchStore.save(branch);
+    return map(branch);
+    }
+
     private List<Branch> getAllBranches() {
         return branchStore.findAll();
     }
@@ -115,5 +113,27 @@ public class RentalCompanyService {
 
         if (owner == null)
             throw new RuntimeException(("Owner is null"));
+    }
+
+    private Branch getBranchById(long id) {
+        return this.branchStore.findById(id)
+                .orElseThrow(() -> new RuntimeException("This branch doesn't exist"));
+    }
+
+    private BranchDetailsView map(Branch branch) {
+        return new BranchDetailsView(branch.getId(), branch.getAddress(), branch.getWorkers(),
+                branch.getAvailableCars());
+    }
+
+    private void updatePartiallyBranch(Branch primaryBranch, UpdateBranchRequest updateBranch){
+        if (updateBranch.getAddress() != null){
+            primaryBranch.setAddress(updateBranch.getAddress());
+        }
+        if (updateBranch.getAvailableCars() != null){
+            primaryBranch.setAvailableCars(updateBranch.getAvailableCars());
+        }
+        if (updateBranch.getWorkers() != null){
+            primaryBranch.setWorkers(updateBranch.getWorkers());
+        }
     }
 }
