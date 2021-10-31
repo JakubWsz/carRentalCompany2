@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 public class Car extends BaseEntity {
     private String brand;
     private String model;
+    private String registration;
     @Enumerated(EnumType.STRING)
     private BodyType bodyType;
     private int productionYear;
@@ -23,10 +24,11 @@ public class Car extends BaseEntity {
     private AvailabilityStatus availabilityStatus;
     private BigDecimal amountPerDay;
 
-    public Car(String brand, String model, BodyType bodyType, int productionYear, String color,
-               int carMileage, AvailabilityStatus availabilityStatus, BigDecimal amountPerDay) {
+    public Car(String brand, String model, String registration, BodyType bodyType, int productionYear,
+               String color, int carMileage, AvailabilityStatus availabilityStatus, BigDecimal amountPerDay) {
         this.brand = brand;
         this.model = model;
+        this.registration = registration;
         this.bodyType = bodyType;
         this.productionYear = productionYear;
         this.color = color;

@@ -2,6 +2,8 @@ package pl.kuba.domain.services;
 
 import org.springframework.stereotype.Service;
 import pl.kuba.domain.stores.CarStore;
+import pl.kuba.entities.AvailabilityStatus;
+import pl.kuba.entities.BodyType;
 import pl.kuba.entities.Car;
 import pl.kuba.entities.Revenue;
 import pl.kuba.infrastructure.persistence.RevenueRepository;
@@ -21,7 +23,11 @@ public class RevenueService {
         this.carStore = carRepository;
     }
 
-    public Revenue buyCar(Car car, BigDecimal price) {
+    public Revenue buyCar(String brand, String model, String registration, BodyType bodyType, int productionYear,
+                          String color, int carMileage, AvailabilityStatus availabilityStatus, BigDecimal amountPerDay,
+                          BigDecimal price) {
+        Car car = new Car(brand,model,registration,bodyType,productionYear,color,carMileage,availabilityStatus,
+                amountPerDay);
         Revenue revenue = new Revenue();
         revenue.setAnnualInvestments(price);
         car.setModificationDate(LocalDateTime.now());
@@ -30,7 +36,11 @@ public class RevenueService {
         return revenueStore.save(revenue);
     }
 
-    public Revenue sellCar(Car car, BigDecimal payment) {
+    public Revenue sellCar(String brand, String model, String registration, BodyType bodyType, int productionYear,
+                           String color, int carMileage, AvailabilityStatus availabilityStatus, BigDecimal amountPerDay,
+                           BigDecimal payment) {
+        Car car = new Car(brand,model,registration,bodyType,productionYear,color,carMileage,availabilityStatus,
+                amountPerDay);
         Revenue revenue = new Revenue();
         revenue.setAnnualIncome(payment);
         car.setDeleted(true);

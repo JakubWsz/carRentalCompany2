@@ -1,4 +1,4 @@
-package pl.kuba.api.dto.response.user;
+package pl.kuba.api.dto.response.branch;
 
 import pl.kuba.entities.Car;
 import pl.kuba.entities.Worker;

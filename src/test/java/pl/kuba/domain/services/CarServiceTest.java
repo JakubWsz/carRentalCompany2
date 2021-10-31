@@ -18,7 +18,7 @@ class CarServiceTest {
         TestCarStore testCarStore = new TestCarStore();
         TestBranchStore testBranchStore = new TestBranchStore();
         TestReservationStore testReservationStore = new TestReservationStore();
-        Car car = new Car("Mercedes", "benc", BodyType.CONVERTIBLE, 1999, "black",
+        Car car = new Car("Mercedes", "benc","123123", BodyType.CONVERTIBLE, 1999, "black",
                 10000, AvailabilityStatus.AVAILABLE, BigDecimal.valueOf(120L));
         testCarStore.save(car);
         CarService carService = new CarService(testCarStore, testBranchStore, testReservationStore);
@@ -36,7 +36,7 @@ class CarServiceTest {
         TestCarStore testCarStore = new TestCarStore();
         TestBranchStore testBranchStore = new TestBranchStore();
         TestReservationStore testReservationStore = new TestReservationStore();
-        Car car = new Car("Mercedes", "benc", BodyType.CONVERTIBLE, 1999, "black",
+        Car car = new Car("Mercedes", "benc","123123", BodyType.CONVERTIBLE, 1999, "black",
                 10000, AvailabilityStatus.AVAILABLE, BigDecimal.valueOf(120L));
         testCarStore.save(car);
         CarService carService = new CarService(testCarStore, testBranchStore, testReservationStore);
@@ -54,8 +54,8 @@ class CarServiceTest {
         TestCarStore testCarStore = new TestCarStore();
         TestBranchStore testBranchStore = new TestBranchStore();
         TestReservationStore testReservationStore = new TestReservationStore();
-        Car car = new Car("Mercedes", "benc", BodyType.CONVERTIBLE, 1999, "black",
-                10000, AvailabilityStatus.BROKEN, BigDecimal.valueOf(120L));
+        Car car = new Car("Mercedes", "benc","123123", BodyType.CONVERTIBLE, 1999, "black",
+                10000, AvailabilityStatus.AVAILABLE, BigDecimal.valueOf(120L));
         testCarStore.save(car);
         CarService carService = new CarService(testCarStore, testBranchStore, testReservationStore);
         //when
@@ -73,16 +73,20 @@ class CarServiceTest {
         TestReservationStore testReservationStore = new TestReservationStore();
         Branch branch = new Branch("Tontoronto");
         testBranchStore.save(branch);
-        Car car = new Car("Mercedes", "benc", BodyType.CONVERTIBLE, 1999, "black",
+        Car car = new Car("Mercedes", "benc","987654", BodyType.CONVERTIBLE,
+                1999, "black",
                 10000, AvailabilityStatus.AVAILABLE, BigDecimal.valueOf(120L));
         testCarStore.save(car);
-        Car car1 = new Car("Mercedes", "benc", BodyType.CONVERTIBLE, 1999, "black",
+        Car car1 = new Car("Mercedes", "benc","098765", BodyType.CONVERTIBLE,
+                1999, "black",
                 10000, AvailabilityStatus.AVAILABLE, BigDecimal.valueOf(120L));
         testCarStore.save(car1);
-        Car car2 = new Car("Mercedes", "benc", BodyType.CONVERTIBLE, 1999, "black",
+        Car car2 = new Car("Mercedes", "benc","76512",
+                BodyType.CONVERTIBLE, 1999, "black",
                 10000, AvailabilityStatus.BROKEN, BigDecimal.valueOf(120L));
         testCarStore.save(car2);
-        Car car3 = new Car("Mercedes", "benc", BodyType.CONVERTIBLE, 1999, "black",
+        Car car3 = new Car("Mercedes", "benc","81289",
+                BodyType.CONVERTIBLE, 1999, "black",
                 10000, AvailabilityStatus.AVAILABLE, BigDecimal.valueOf(120L));
         testCarStore.save(car3);
         Reservation reservation = new Reservation(LocalDate.now(), new Client(), car, LocalDate.now(),

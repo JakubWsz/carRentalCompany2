@@ -1,4 +1,4 @@
-package pl.kuba.api.dto.response.user;
+package pl.kuba.api.dto.response.branch;
 
 public class BranchView {
     private long id;
