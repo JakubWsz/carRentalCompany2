@@ -19,7 +19,7 @@ public class ReservationAPI {
     }
 
     @PostMapping("/reserve")
-    public Reservation makeReservation(@RequestBody MakeReservationRequest makeReservationRequest) throws ParseException {
+    public Reservation makeReservation(@RequestBody MakeReservationRequest makeReservationRequest) {
         return reservationService.makeReservation(
                 makeReservationRequest.getClient(),
                 makeReservationRequest.getCar(),
@@ -33,7 +33,7 @@ public class ReservationAPI {
     }
 
     @DeleteMapping("/cancel")
-    public void cancelReservation(@RequestParam long reservationId) throws ParseException {
+    public void cancelReservation(@RequestParam long reservationId) {
         reservationService.cancelReservation(reservationId);
     }
 

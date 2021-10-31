@@ -2,8 +2,8 @@ package pl.kuba.domain.services;
 
 import org.springframework.stereotype.Service;
 import pl.kuba.api.dto.request.branch.UpdateBranchRequest;
-import pl.kuba.api.dto.response.user.BranchDetailsView;
-import pl.kuba.api.dto.response.user.BranchView;
+import pl.kuba.api.dto.response.branch.BranchDetailsView;
+import pl.kuba.api.dto.response.branch.BranchView;
 import pl.kuba.domain.stores.BranchStore;
 import pl.kuba.domain.stores.RentalCompanyStore;
 import pl.kuba.entities.Branch;
