@@ -3,11 +3,13 @@ package pl.kuba.api.rest;
 import org.springframework.web.bind.annotation.*;
 import pl.kuba.api.dto.request.car.*;
 import pl.kuba.domain.services.CarService;
+import pl.kuba.entities.AvailabilityStatus;
 import pl.kuba.entities.Car;
 
 import java.util.List;
 
-@RestController("/car")
+@RestController()
+@RequestMapping("/car")
 public class CarAPI {
     private final CarService carService;
 
@@ -16,9 +18,9 @@ public class CarAPI {
     }
 
     @GetMapping("/available")
-    public List<Car> getAvailableCars(@RequestParam AvailableCarRequest availableCarRequest) {
+    public List<Car> getAvailableCars(@RequestParam  String branchLocation) {
         return carService.getAvailableCars(
-                availableCarRequest.getBranchLocation()
+                branchLocation
         );
     }
 

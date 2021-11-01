@@ -19,7 +19,7 @@ class CarAPITest {
     @Test
     void getCarAvailabilityStatusByParticularDate() throws Exception {
 
-        mvc.perform(MockMvcRequestBuilders.get("/car/available"))
+        mvc.perform(MockMvcRequestBuilders.get("/car/available").param("branch"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().is(200));
     }

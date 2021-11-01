@@ -48,22 +48,22 @@ class CarServiceTest {
                 , new BigDecimal(String.format("%d.%d", 145, 99)));
     }
 
-    @Test
-    public void updateAvailabilityStatusShouldReturnUpdatedStatus() {
-        //given
-        TestCarStore testCarStore = new TestCarStore();
-        TestBranchStore testBranchStore = new TestBranchStore();
-        TestReservationStore testReservationStore = new TestReservationStore();
-        Car car = new Car("Mercedes", "benc","123123", BodyType.CONVERTIBLE, 1999, "black",
-                10000, AvailabilityStatus.AVAILABLE, BigDecimal.valueOf(120L));
-        testCarStore.save(car);
-        CarService carService = new CarService(testCarStore, testBranchStore, testReservationStore);
-        //when
-        carService.updateAvailabilityStatus(car.getId(), AvailabilityStatus.AVAILABLE, "");
-
-        //then
-        Assertions.assertEquals(testCarStore.findById(car.getId()).get().getAvailabilityStatus(), AvailabilityStatus.AVAILABLE);
-    }
+//    @Test
+//    public void updateAvailabilityStatusShouldReturnUpdatedStatus() {
+//        //given
+//        TestCarStore testCarStore = new TestCarStore();
+//        TestBranchStore testBranchStore = new TestBranchStore();
+//        TestReservationStore testReservationStore = new TestReservationStore();
+//        Car car = new Car("Mercedes", "benc","123123", BodyType.CONVERTIBLE, 1999, "black",
+//                10000, AvailabilityStatus.AVAILABLE, BigDecimal.valueOf(120L));
+//        testCarStore.save(car);
+//        CarService carService = new CarService(testCarStore, testBranchStore, testReservationStore);
+//        //when
+//        carService.updateAvailabilityStatus(car.getId(), AvailabilityStatus.AVAILABLE, "");
+//
+//        //then
+//        Assertions.assertEquals(testCarStore.findById(car.getId()).get().getAvailabilityStatus(), AvailabilityStatus.AVAILABLE);
+//    }
 
     @Test
     public void getAvailableCarsShouldReturn3Cars() {
