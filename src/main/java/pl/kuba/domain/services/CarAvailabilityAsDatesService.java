@@ -18,14 +18,11 @@ import java.util.Optional;
 
 @Service
 public class CarAvailabilityAsDatesService {
-    private final CarAvailabilityAsDatesStore carAvailabilityAsDatesStore;
     private final RentStore rentStore;
     private final ReturnStore returnStore;
     private final ReservationStore reservationStore;
 
-    public CarAvailabilityAsDatesService(CarAvailabilityAsDatesStore carAvailabilityAsDatesStore,
-                                         RentStore rentStore, ReturnStore returnStore, ReservationStore reservationStore) {
-        this.carAvailabilityAsDatesStore = carAvailabilityAsDatesStore;
+    public CarAvailabilityAsDatesService(RentStore rentStore, ReturnStore returnStore, ReservationStore reservationStore) {
         this.rentStore = rentStore;
         this.returnStore = returnStore;
         this.reservationStore = reservationStore;
@@ -35,7 +32,10 @@ public class CarAvailabilityAsDatesService {
         Map<LocalDate, AvailabilityStatus> whenCarIsAvailable = new HashMap<>();
         LocalDate particularDate = StringToDateConverter.convertStringToDate(date);
 
-        CarAvailabilityAsDates dates = getDatesRangeCarsPotentialAvailability(id);
+        Optional<CarAvailabilityAsDates> possibleDates = getDatesRangeCarsPotentialAvailability(id);
+        if (possibleDates.isEmpty())
+            return whenCarIsAvailable;
+        CarAvailabilityAsDates dates = possibleDates.get();
 
         for (LocalDate dateRange = dates.getRentDate(); dateRange.isAfter(dates.getReturnDate()); dateRange = dateRange.plusDays(1)) {
             LocalDate finalDateRange = dateRange;
@@ -48,7 +48,7 @@ public class CarAvailabilityAsDatesService {
         return whenCarIsAvailable;
     }
 
-    private CarAvailabilityAsDates getDatesRangeCarsPotentialAvailability(long id) {
+    private Optional<CarAvailabilityAsDates> getDatesRangeCarsPotentialAvailability(long id) {
         LocalDate rentDate;
         LocalDate returnDate;
         Optional<Rent> optionalRent = getSelectedCarRent(id);
@@ -56,13 +56,13 @@ public class CarAvailabilityAsDatesService {
 
         if (optionalRent.isPresent()) {
             rentDate = optionalRent.get().getRentDate();
-        } else throw new RuntimeException("There is no such rent date");
+        } else return Optional.empty();
 
         if (optionalReturn.isPresent()) {
             returnDate = optionalReturn.get().getReturnDate();
-        } else throw new RuntimeException("There is no such return date");
+        } else return Optional.empty();
 
-        return carAvailabilityAsDatesStore.save(new CarAvailabilityAsDates(rentDate, returnDate));
+        return Optional.of(new CarAvailabilityAsDates(rentDate, returnDate));
     }
 
     private Optional<Rent> getSelectedCarRent(long id) {

@@ -30,4 +30,18 @@ public class Reservation extends BaseEntity {
     public Reservation() {
 
     }
+
+    @Override
+    public String toString() {
+        return "Reservation{" +
+                "reservationDate=" + reservationDate +
+                ", client=" + client +
+                ", car=" + car +
+                ", rentDate=" + rentDate +
+                ", returnDate=" + returnDate +
+                ", rentingBranch=" + rentingBranch +
+                ", receivingBranch=" + receivingBranch +
+                ", amountToPay=" + amountToPay +
+                '}';
+    }
 }

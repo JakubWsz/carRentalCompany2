@@ -22,4 +22,13 @@ public class BaseEntity {
     private LocalDateTime modificationDate;
 
     private boolean deleted;
+
+    @Override
+    public String toString() {
+        return "BaseEntity{" +
+                "id=" + id +
+                ", modificationDate=" + modificationDate +
+                ", deleted=" + deleted +
+                '}';
+    }
 }

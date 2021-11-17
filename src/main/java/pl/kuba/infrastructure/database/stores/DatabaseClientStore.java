@@ -20,6 +20,6 @@ public class DatabaseClientStore implements ClientStore {
 
     @Override
     public Client findByEmail(String email) {
-        return findByEmail(email);
+        return clientRepository.findByEmail(email).get();
     }
 }

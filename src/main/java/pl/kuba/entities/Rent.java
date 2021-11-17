@@ -24,4 +24,14 @@ public class Rent extends BaseEntity{
     public Rent() {
 
     }
+
+    @Override
+    public String toString() {
+        return "Rent{" +
+                "worker=" + worker +
+                ", rentDate=" + rentDate +
+                ", reservation=" + reservation +
+                ", comment='" + comment + '\'' +
+                '}';
+    }
 }

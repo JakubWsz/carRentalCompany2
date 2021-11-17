@@ -18,7 +18,7 @@ public class CarAPI {
     }
 
     @GetMapping("/available")
-    public List<Car> getAvailableCars(@RequestParam  String branchLocation) {
+    public List<Car> getAvailableCars(@RequestParam String branchLocation) {
         return carService.getAvailableCars(
                 branchLocation
         );

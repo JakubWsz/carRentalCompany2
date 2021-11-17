@@ -1,8 +1,10 @@
 package pl.kuba.api.rest;
 
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pl.kuba.api.dto.request.client.CreateClientRequest;
 import pl.kuba.domain.services.ClientService;
 import pl.kuba.entities.Client;
 
@@ -16,7 +18,12 @@ public class ClientAPI {
     }
 
     @PostMapping("/add")
-    public void addNewClient(Client client) {
-        clientService.addNewClient(client);
+    public void addNewClient(@RequestBody CreateClientRequest client) {
+        clientService.addNewClient(
+                client.getFirstName(),
+                client.getLastName(),
+                client.getAddress(),
+                client.getEmail()
+        );
     }
 }

@@ -16,16 +16,11 @@ public class ClientService {
         this.clientStore = clientRepository;
     }
 
-    public void addNewClient(Client client) {
-       if (isEmailExists(client)) {
-           client.setModificationDate(LocalDateTime.now());
-           clientStore.save(client);
+    public void addNewClient(String firstname, String lastname, String email, String address) {
+        if (clientStore.findByEmail(email).isEmpty()) {
+            Client client = new Client(firstname, lastname, email, address);
+            client.setModificationDate(LocalDateTime.now());
+            clientStore.save(client);
         } else throw new RuntimeException("Account with this email already exist");
-    }
-
-    private boolean isEmailExists(Client client) {
-        List<Client> clients = new ArrayList<>(clientStore.findByEmail(client.getEmail()));
-       return clients.stream()
-                .anyMatch(optionalClient -> optionalClient.getEmail().equals(client.getEmail()));
     }
 }
