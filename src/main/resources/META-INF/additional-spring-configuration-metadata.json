@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "run",
+      "type": "java.lang.String",
+      "description": "Description for run."
+  }
+] }
