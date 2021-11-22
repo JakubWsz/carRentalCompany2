@@ -26,7 +26,7 @@ public class RevenueService {
     public Revenue buyCar(String brand, String model, String registration, BodyType bodyType, int productionYear,
                           String color, int carMileage, AvailabilityStatus availabilityStatus, BigDecimal amountPerDay,
                           BigDecimal price) {
-        Car car = new Car(brand,model,registration,bodyType,productionYear,color,carMileage,availabilityStatus,
+        Car car = new Car(brand, model, registration, bodyType, productionYear, color, carMileage, availabilityStatus,
                 amountPerDay);
         Revenue revenue = new Revenue();
         revenue.setAnnualInvestments(price);
@@ -39,7 +39,7 @@ public class RevenueService {
     public Revenue sellCar(String brand, String model, String registration, BodyType bodyType, int productionYear,
                            String color, int carMileage, AvailabilityStatus availabilityStatus, BigDecimal amountPerDay,
                            BigDecimal payment) {
-        Car car = new Car(brand,model,registration,bodyType,productionYear,color,carMileage,availabilityStatus,
+        Car car = new Car(brand, model, registration, bodyType, productionYear, color, carMileage, availabilityStatus,
                 amountPerDay);
         Revenue revenue = new Revenue();
         revenue.setAnnualIncome(payment);

@@ -8,7 +8,6 @@ import pl.kuba.entities.*;
 import pl.kuba.infrastructure.datehelpers.DateFormatter;
 import pl.kuba.infrastructure.datehelpers.StringToDateConverter;
 import pl.kuba.infrastructure.persistence.RentRepository;
-import pl.kuba.infrastructure.persistence.ReturnRepository;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -60,9 +59,7 @@ public class ReservationService {
     }
 
     private Optional<Reservation> findOptionalReservationById(long reservationId) {
-        return reservationStore.findAll().stream()
-                .filter(reservation -> reservation.getId() == reservationId)
-                .findFirst();
+        return reservationStore.findById(reservationId);
     }
 
     private void throwExceptionThereIsNoReservationWithPassedId() {
@@ -75,9 +72,7 @@ public class ReservationService {
     }
 
     private Optional<Car> getOptionalCar(Car car) {
-        return carStore.findAll().stream()
-                .filter(car1 -> car1.getId() == car.getId())
-                .findFirst();
+        return carStore.findById(car.getId());
     }
 
     private Return confirmCarReceipt(Worker worker, LocalDate returnDate, Reservation reservation,

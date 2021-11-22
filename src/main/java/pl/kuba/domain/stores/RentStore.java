@@ -6,6 +6,5 @@ import java.util.List;
 
 public interface RentStore {
     Rent save(Rent rent);
-
     List<Rent> findAll();
 }

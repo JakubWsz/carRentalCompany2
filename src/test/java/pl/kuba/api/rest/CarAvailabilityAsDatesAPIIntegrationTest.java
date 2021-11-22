@@ -30,10 +30,11 @@ class CarAvailabilityAsDatesAPIIntegrationTest {
         System.out.println("dostępne auta:" + carRepository.findAll());
         System.out.println("dostępne rezerwacje:" + rentStore.findAll());
 
-         mvc.perform(MockMvcRequestBuilders.get("/car-availability/status")
-         .param("id","2")
-         .param("date","15-08-1999"))
+        mvc.perform(MockMvcRequestBuilders.get("/car-availability/status")
+                        .param("id", "2")
+                        .param("date", "15-08-1999"))
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().is(200));
+                .andExpect(MockMvcResultMatchers.status().is(200))
+                .andReturn();
     }
 }
