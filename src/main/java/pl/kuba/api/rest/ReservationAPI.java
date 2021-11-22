@@ -28,23 +28,15 @@ public class ReservationAPI {
                 makeReservationRequest.getRentingBranch(),
                 makeReservationRequest.getReceivingBranch(),
                 makeReservationRequest.getRentingWorker(),
-                makeReservationRequest.getComment()
+                makeReservationRequest.getSurcharge(),
+                makeReservationRequest.getReceiptingWorker(),
+                makeReservationRequest.getCommentRent(),
+                makeReservationRequest.getCommentReceipt()
         );
     }
 
     @DeleteMapping("/cancel")
     public void cancelReservation(@RequestParam long reservationId) {
         reservationService.cancelReservation(reservationId);
-    }
-
-    @PostMapping("/confirm-receipt")
-    public Return confirmCarReceipt(@RequestBody ConfirmCarReceiptRequest confirmCarReceiptRequest) {
-        return reservationService.confirmCarReceipt(
-                confirmCarReceiptRequest.getWorker(),
-                confirmCarReceiptRequest.getReturnDate(),
-                confirmCarReceiptRequest.getReservation(),
-                confirmCarReceiptRequest.getSurcharge(),
-                confirmCarReceiptRequest.getComment()
-        );
     }
 }

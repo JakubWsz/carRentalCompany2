@@ -17,5 +17,8 @@ public class MakeReservationRequest {
     private final Branch rentingBranch;
     private final Branch receivingBranch;
     private final Worker rentingWorker;
-    private final String comment;
+    private final int surcharge;
+    private final Worker receiptingWorker;
+    private final String commentRent;
+    private final String commentReceipt;
 }

@@ -3,6 +3,7 @@ package pl.kuba.domain.services;
 import org.springframework.stereotype.Service;
 import pl.kuba.domain.stores.CarStore;
 import pl.kuba.domain.stores.ReservationStore;
+import pl.kuba.domain.stores.ReturnStore;
 import pl.kuba.entities.*;
 import pl.kuba.infrastructure.datehelpers.DateFormatter;
 import pl.kuba.infrastructure.datehelpers.StringToDateConverter;
@@ -17,43 +18,36 @@ public class ReservationService {
     private final ReservationStore reservationStore;
     private final CarStore carStore;
     private final RentRepository rentStore;
-    private final ReturnRepository returnStore;
+    private final ReturnStore returnStore;
 
     public ReservationService(ReservationStore reservationRepository, CarStore carRepository,
-                              RentRepository rentRepository, ReturnRepository returnRepository) {
+                              RentRepository rentRepository, ReturnStore returnStore) {
         this.reservationStore = reservationRepository;
         this.carStore = carRepository;
         this.rentStore = rentRepository;
-        this.returnStore = returnRepository;
+        this.returnStore = returnStore;
     }
 
     public Reservation makeReservation(Client client, Car car, String rentDate, String returnDate,
                                        Branch rentingBranch, Branch receivingBranch, Worker rentingWorker,
-                                       String comment) {
+                                       int surcharge, Worker receiptingWorker, String commentRent,
+                                       String commentReceipt) {
         Optional<Car> optionalCar = getOptionalCar(car);
         Car actualCar;
         if (optionalCar.isPresent())
             actualCar = optionalCar.get();
         else throw new RuntimeException("Selected car doesn't exist");
+
         LocalDate rentDateAsDate = StringToDateConverter.convertStringToDate(rentDate);
         LocalDate returnDateAsDate = StringToDateConverter.convertStringToDate(returnDate);
-        Reservation reservation = new Reservation(getTodayDate(), client, car, rentDateAsDate, returnDateAsDate, rentingBranch,
-                receivingBranch, actualCar.getAmountPerDay());
-        Rent rent = rentCreator(rentingWorker, rentDateAsDate, reservation, comment);
-        rentStore.save(rent);
+        Reservation reservation = new Reservation(getTodayDate(), client, car, rentDateAsDate, returnDateAsDate,
+                rentingBranch, receivingBranch, actualCar.getAmountPerDay());
+
+        rentCar(rentingWorker, rentDateAsDate, reservation, commentRent);
+        confirmCarReceipt(receiptingWorker, returnDateAsDate, reservation, surcharge, commentReceipt);
         return reservationStore.save(reservation);
     }
 
-    public Return confirmCarReceipt(Worker worker, LocalDate returnDate, Reservation reservation,
-                                    int surcharge, String comment) {
-        Return returnVariable = new Return();
-        returnVariable.setWorker(worker);
-        returnVariable.setReturnDate(returnDate);
-        returnVariable.setReservation(reservation);
-        returnVariable.setSurcharge(surcharge);
-        returnVariable.setComment(comment);
-        return returnStore.save(returnVariable);
-    }
 
     public void cancelReservation(long reservationId) {
         Optional<Reservation> optionalReservation = findOptionalReservationById(reservationId);
@@ -86,12 +80,23 @@ public class ReservationService {
                 .findFirst();
     }
 
-    private Rent rentCreator(Worker worker, LocalDate rentDate, Reservation reservation, String comment) {
-        Rent rent = new Rent();
-        rent.setWorker(worker);
-        rent.setReservation(reservation);
-        rent.setRentDate(rentDate);
-        rent.setComment(comment);
-        return rent;
+    private Return confirmCarReceipt(Worker worker, LocalDate returnDate, Reservation reservation,
+                                     int surcharge, String comment) {
+        Return returnVariable = new Return();
+        returnVariable.setWorker(worker);
+        returnVariable.setReturnDate(returnDate);
+        returnVariable.setReservation(reservation);
+        returnVariable.setSurcharge(surcharge);
+        returnVariable.setComment(comment);
+        return returnStore.save(returnVariable);
+    }
+
+    private Rent rentCar(Worker rentingWorker, LocalDate rentDateAsDate, Reservation reservation, String commentRent) {
+        Rent rentVariable = new Rent();
+        rentVariable.setWorker(rentingWorker);
+        rentVariable.setRentDate(rentDateAsDate);
+        rentVariable.setReservation(reservation);
+        rentVariable.setComment(commentRent);
+        return rentStore.save(rentVariable);
     }
 }

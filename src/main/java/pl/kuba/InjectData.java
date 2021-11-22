@@ -61,6 +61,7 @@ public class InjectData implements ApplicationRunner {
         Client client = clientRepository.findByEmail("asd@adw.pl").get();
         Worker worker = workerRepository.save(new Worker("asd", "af", false, branch));
         reservationService.makeReservation(client, carRepository.findAll().get(0), "15-08-1999",
-                "15-08-1999", branch, branch, worker, "asd");
+                "15-08-1999", branch, branch, worker, 150, worker, "asd",
+                "asd");
     }
 }
